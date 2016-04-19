@@ -16,8 +16,8 @@
 entrada = open("ej-especif-aut.txt", "r") 
 #sabiendo que de la linea 1 a 4 estan los datos que son fijos hacer
 for i in range (4):
-    content(i)=entrada.readline()
-    print content(i)
+    content=entrada.readline()
+    print content
 # parseo la funcion de transicion
 # se que el eol es un hash
 
