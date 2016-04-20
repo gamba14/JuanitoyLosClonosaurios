@@ -20,6 +20,8 @@ import sys, getopt
 
 def parseStates(asf, line):
     """ Parse the line with the states"""
+    states={}
+    
     pass
 
 
