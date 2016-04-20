@@ -20,28 +20,31 @@ import sys, getopt
 
 def parseStates(asf, line):
     """ Parse the line with the states"""
-    states={}
-    
+    asf["states"]=line    
     pass
 
 
 def parseInputs(asf, line):
     """ Parse the line with the inputs"""
+    asf["inputs"]=line
     pass
 
 
 def parseInitState(asf, line):
     """ Parse the line with the Init state"""
+    asf["init"]=0
     pass
 
 
 def parseFinalStates(asf, line):
     """ Parse the line with the final/accepted states"""
+    asf["final"]=line
     pass
 
 
 def parseTransition(asf, line):
     """ Parse one line with a part of the transition function """
+
     pass
 
 
@@ -74,16 +77,17 @@ def parseFile(path):
     return asf
 
 
-def cllambda (estados):
-	""" Funcion clausura lambda """
-    l=estados
-    while length(l) > 0: #aca quiero asumir que la lista l se ira consumiendo a medida que itere
-    	estados.pop([])
+#def cllambda (estados):
+#   """ Funcion clausura lambda """
+#    pass
+#    #l=estados
+#    #while length(l) > 0: #aca quiero asumir que la lista l se ira consumiendo a medida que itere
+#    #  estados.pop([])
 
 
 def mover (estado,sigma): #sea sigma un elemento de sigma :P
-	""" funcion mover """
-	pass
+    """ funcion mover """
+    pass
     
 
 def isValid(asd, input):
@@ -104,12 +108,12 @@ def main(argv):
         opts, args = getopt.getopt(argv,"ha:s:",["automata=","string="])
 
     except getopt.GetoptError:
-        print 'test.py -i <inputfile> -o <outputfile>' #TODO: cambiar
+        print ('test.py -i <inputfile> -o <outputfile>') #TODO: cambiar
         sys.exit(2)
 
     for opt, arg in opts:
         if opt == '-h':
-            print 'test.py -i <inputfile> -o <outputfile>' #TODO: cambiar
+            print ('test.py -i <inputfile> -o <outputfile>') #TODO: cambiar
             sys.exit()
 
         elif opt in ("-a", "--automata"):
@@ -120,23 +124,24 @@ def main(argv):
             withString  = True
 
     # Parse the file if exist
-    if (os.path.exists(path) && os.path.isfile(path))
+    if (os.path.exists(path) and os.path.isfile(path)):
         asf = parseFile(path)
-    else
-        print "El archivo no es valido" # TODO: mejorar mensaje de error
+    else:
+        print ("El archivo no es valido") # TODO: mejorar mensaje de error
 
-    if (withString)
-        if (isValid(asf, inputString))
-            print "La cadena es aceptada por el automata" #TODO: mejorar el mensaje
-        else
-            print "La cadena NO es aceptada por el automata" #TODO: mejorar el mensaje
-    else
+    if (withString):
+        if (isValid(asf, inputString)):
+            print ("La cadena es aceptada por el automata") #TODO: mejorar el mensaje
+        else:
+            print ("La cadena NO es aceptada por el automata") #TODO: mejorar el mensajepyt
+    else:
         # TODO: leer la cadena que ingresa el usuario y chekear si la acepta el automata
-        print "implementame (?)"
+        print ("implementame (?)")
 
 
 if __name__ == "__main__":
     # the code being run directly, other wise is imported
     if __name__ == "__main__":
         main(sys.argv[1:])
+    
     
