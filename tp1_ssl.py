@@ -44,7 +44,10 @@ def parseValues(string):
             aux = ''
         else:
             aux += c
-     
+            
+    if aux.strip() != '':
+        values.append(aux.strip())
+        
     return values
 
 
@@ -54,7 +57,7 @@ def parseStates(asf, line):
     begin, end = findBraces(line)
     
     if (begin != -1):
-        aux = parseValues(line[begin:end])
+        aux = parseValues(line[begin + 1:end])
         
         try:
             asf["states"]= set(map(int, aux))
@@ -68,7 +71,7 @@ def parseInputs(asf, line):
     begin, end = findBraces(line)
     
     if (begin != -1):
-        asf["inputs"] = parseValues(line[begin:end])
+        asf["inputs"] = parseValues(line[begin + 1:end])
 
 
 def parseInitState(asf, line):
@@ -82,7 +85,7 @@ def parseFinalStates(asf, line):
     begin, end = findBraces(line)
     
     if (begin != -1):
-        aux = parseValues(line[begin:end])
+        aux = parseValues(line[begin + 1:end])
 
         try:
             asf["final"]= set(map(int, aux))
@@ -175,6 +178,7 @@ def main(argv):
     # Parse the file if exist
     if (os.path.exists(path) and os.path.isfile(path)):
         asf = parseFile(path)
+        print (asf) # for debug only
     else:
         print ("El archivo no es valido") # TODO: mejorar mensaje de error
 
