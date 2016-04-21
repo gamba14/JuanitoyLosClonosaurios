@@ -18,16 +18,57 @@ import sys, getopt
 # linea 3 : el estado inicial
 # linea 4 : los estados aceptados
 
+def findBraces(string):
+    """valid the braces position and get them"""
+    
+    begin = string.find('{')
+    end   = string.find('}')
+    
+    if ((begin != -1) and (end != -1) and (begin < end)):
+        if (string.find('{', begin, end) != -1):
+            return (begin, end)
+    
+    return (-1, -1) # invalid string
+
+
+def parseValues(string):
+    """Parse values separed by ',' """
+    values = []
+    
+    aux = ''
+    for c in string: 
+        if c == ',':
+            if aux.strip() != '':
+                values.append(aux.strip())
+            
+            aux = ''
+        else:
+            aux += c
+     
+    return values
+
+
 def parseStates(asf, line):
     """ Parse the line with the states"""
-    asf["states"]=line    
-    pass
+    
+    begin, end = findBraces(line)
+    
+    if (begin != -1):
+        aux = parseValues(line[begin:end])
+        
+        try:
+            asf["states"]= set(map(int, aux))
+            
+        except ValueError:
+            pass # TODO: implementar
 
 
 def parseInputs(asf, line):
     """ Parse the line with the inputs"""
-    asf["inputs"]=line
-    pass
+    begin, end = findBraces(line)
+    
+    if (begin != -1):
+        asf["inputs"] = parseValues(line[begin:end])
 
 
 def parseInitState(asf, line):
@@ -38,8 +79,16 @@ def parseInitState(asf, line):
 
 def parseFinalStates(asf, line):
     """ Parse the line with the final/accepted states"""
-    asf["final"]=line
-    pass
+    begin, end = findBraces(line)
+    
+    if (begin != -1):
+        aux = parseValues(line[begin:end])
+
+        try:
+            asf["final"]= set(map(int, aux))
+            
+        except ValueError:
+            pass # TODO: implementar
 
 
 def parseTransition(asf, line):
