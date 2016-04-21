@@ -76,8 +76,14 @@ def parseInputs(asf, line):
 
 def parseInitState(asf, line):
     """ Parse the line with the Init state"""
-    asf["init"]=0
-    pass
+    begin, end = findBraces(line)
+    
+    if (begin != -1):
+        # TODO: poner un try y verificar que pertenesca a los estados
+        asf["init"] = int(line[begin + 1:end])
+    else:
+        pass # TODO: hacer algo cuando el formato no coincida
+    
 
 
 def parseFinalStates(asf, line):
@@ -107,7 +113,7 @@ def parseFile(path):
     asf = { 
         "states": set([]),
         "inputs": set([]),
-        "init": 0,
+        "init": -1,
         "final": set([]),
         "transtion": []
     }
