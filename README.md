@@ -1,3 +1,3 @@
 # juanitoylosclonosaurios
-SSL
-Git para tps SSL
+Sintaxis y semantica de los lenguajes
+Git para tps
