@@ -79,8 +79,14 @@ def parseInitState(asf, line):
     begin, end = findBraces(line)
     
     if (begin != -1):
-        # TODO: poner un try y verificar que pertenesca a los estados
-        asf["init"] = int(line[begin + 1:end])
+        # TODO: poner un try
+        init = int(line[begin + 1:end])
+        
+        if init in asf["states"]:
+            asf["init"] = init
+        else:
+            pass #TODO: hacer algo cuando el formato no coincida
+
     else:
         pass # TODO: hacer algo cuando el formato no coincida
     
@@ -94,8 +100,13 @@ def parseFinalStates(asf, line):
         aux = parseValues(line[begin + 1:end])
 
         try:
-            asf["final"]= set(map(int, aux))
+            final = set(map(int, aux))
             
+            if all(estado in asf["states"] for estado in final):
+                asf["final"] = final
+            else:
+                pass # TODO implementar el caso en que no coincidan
+                
         except ValueError:
             pass # TODO: implementar
 
