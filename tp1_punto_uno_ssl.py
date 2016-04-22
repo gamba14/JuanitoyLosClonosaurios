@@ -38,6 +38,7 @@ def findBraces(string):
 
         #Verifica que No se habra una nueva llave antes de cerrar la ya abierta
         if (string.find('{', begin, end) != -1):
+            # Devuelvo un par ordenado con las posiciones de las llaves
             return (begin, end)
     
     # Si todo lo demas falla devuelvo un valor absurdo para indicar que tiene
@@ -281,7 +282,7 @@ def main(argv):
         # Si hay alguna opcion invalida
 
         # Se informa la forma correcta de uso
-        print ('test.py -i <inputfile> -o <outputfile>') #TODO: cambiar
+        print ('tp1_punto_uno_ssl.py -i <inputfile> -o <outputfile>')
         
         # Y se finaliza el scritp informando un error 
         # Cuando se finaliza con cualquier nuemero distinto de 0 se considerar
@@ -295,7 +296,7 @@ def main(argv):
         if opt == '-h':
 
             # se informa la forma de uso correcto
-            print ('test.py -i <inputfile> -o <outputfile>') #TODO: cambiar
+            print ('tp1_punto_uno_ssl.py -i <inputfile> -o <outputfile>')
 
             # Se finaliza el scritp sin error
             sys.exit()
@@ -325,25 +326,25 @@ def main(argv):
         # Imprimo el resultado del parseo (me canse)
         print (asf) 
 
+        # Si se dispone a cadena a comprobar
+        if (withString):
+
+            # Verifico que la cadena sea aceptada
+            if (isValid(asf, inputString)):
+                # Informo que es aceptada
+                print ("La cadena es aceptada por el automata") #TODO: mejorar el mensaje
+
+            else:
+                # Informo que NO es aceptada
+                print ("La cadena NO es aceptada por el automata") #TODO: mejorar el mensajepyt
+        else:
+            # leer las cadena que ingresa el usuario y chekear si cada una es 
+            # aceptada por el automata
+            print ("implementame (?)") # TODO implementar
+
     else:
         # Si la ruta no es valida o no corresponde a un archivo
         print ("El archivo no es valido") # TODO: mejorar mensaje de error
-
-    # Si se dispone a cadena a comprobar
-    if (withString):
-
-        # Verifico que la cadena sea aceptada
-        if (isValid(asf, inputString)):
-            # Informo que es aceptada
-            print ("La cadena es aceptada por el automata") #TODO: mejorar el mensaje
-
-        else:
-            # Informo que NO es aceptada
-            print ("La cadena NO es aceptada por el automata") #TODO: mejorar el mensajepyt
-    else:
-        # leer las cadena que ingresa el usuario y chekear si cada una es 
-        # aceptada por el automata
-        print ("implementame (?)") # TODO implementar
 
 
 # Si el scritp es llamado directamente (Osea NO es importado como libreria)
