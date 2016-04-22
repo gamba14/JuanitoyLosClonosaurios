@@ -209,9 +209,8 @@ def main(argv):
         print ("implementame (?)")
 
 
+# the code being run directly, other wise is imported
 if __name__ == "__main__":
-    # the code being run directly, other wise is imported
-    if __name__ == "__main__":
-        main(sys.argv[1:])
+    main(sys.argv[1:])
     
     
