@@ -108,7 +108,8 @@ def parseStates(asf, line):
         except ValueError:
             # Si NO se pueve convertir algun elemento de la lista en numero
             # aviso que el formato NO es valido y termino el script
-            pass # TODO: implementar
+            return False 
+
 
 
 def parseInputs(asf, line):
@@ -188,9 +189,18 @@ def parseFinalStates(asf, line):
 
 def parseTransition(asf, line):
     """Obtengo de la linea la funcion de transicion"""
-    # TODO: implementar
-    pass
-
+    """Creo por cada estado un nuevo diccionario con las transiciones"""
+    cstates = 0
+    state=line[1]
+    nrstate='state'+str(state)
+    nrstate={}
+    for i in xrange(2,len(line)):
+    	sigma = line[i+cstates] 
+    	state_new = line [i+1+cstates]
+    	nrostate[sigma]=state_new
+    	cstates= cstates + 2 
+    	if states >= len(line) :
+    	    break
 
 def parseFile(path):
     """
