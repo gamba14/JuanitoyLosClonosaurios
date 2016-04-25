@@ -194,7 +194,7 @@ def parseTransition(asf, line):
     state=line[1]
     nrstate='state'+str(state)
     nrstate={}
-    for i in xrange(2,len(line)):
+    for i in xrange(2,len(line)-1): #me aseguro que no agarre la marca de fin de archivo jaja
     	sigma = line[i+cstates] 
     	state_new = line [i+1+cstates]
     	nrostate[sigma]=state_new
