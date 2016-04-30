@@ -23,7 +23,7 @@ import sys, getopt
 def findBraces(string):
     """
     Devuelve las posiciones de cada una de las llaves y verifica que no se 
-    habra una nueva antes de cerrar la ya abierto
+    abra una nueva antes de cerrar la ya abierto
     """
     
     # Busco el primer resulatdo de '{'
@@ -191,16 +191,21 @@ def parseTransition(asf, line):
     """Obtengo de la linea la funcion de transicion"""
     """Creo por cada estado un nuevo diccionario con las transiciones"""
     cstates = 0
-    state=line[1]
-    nrstate='state'+str(state)
-    nrstate={}
-    for i in xrange(2,len(line)-1): #me aseguro que no agarre la marca de fin de archivo jaja
-    	sigma = line[i+cstates] 
-    	state_new = line [i+1+cstates]
-    	nrostate[sigma]=state_new
-    	cstates= cstates + 2 
-    	if states >= len(line) :
-    	    break
+    nrstate=[] #creo una lista vacia para el destino del estado
+    for character in line: #itero sobre el largo de la cadena
+        cstates=cstates+1 #este contador lo uso para validar si el caracter es un sigma o un estado
+        if character == '#': #si el caracter es el hash se termino el archivo y "nos vimo "
+            break
+        elif (cstates % 2 == 0):# si el numero de linea es par quiere decir que aca hay un sigma
+            sigma= character
+        elif not(cstates%2 == 0) and (cstates > 1): #tuve que poner esto por que me dio paja pensarlo de otra forma 
+            state= character                        #en si, dice que si no es par y no es el segundo caracter
+            nrstate.append((sigma,state))           # ya tengo sigma y estado siguiente , lo agrego a la lista vacia
+        else: pass
+    statebuilt=dict(nrstate) # construyo el diccionario a partir de la lista
+    asf["transtion"].append(statebuilt) # meto el diccionario a la lista de transiciones
+    
+                
 
 def parseFile(path):
     """
@@ -210,7 +215,6 @@ def parseFile(path):
 
     # Defino un dicionario que representa al automata
     # TODO: buscar otro tipo de dato que contenga estos valores 
-    # ¿una clase/objeto?
     asf = { 
         "states": set([]),
         "inputs": set([]),
