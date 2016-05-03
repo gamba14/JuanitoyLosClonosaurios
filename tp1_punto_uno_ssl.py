@@ -258,12 +258,24 @@ def parseFile(path):
     return asf
 
 
-#def cllambda (estados):
-#   """ Funcion clausura lambda """
-#    pass
-#    #l=estados
-#    #while length(l) > 0: #aca quiero asumir que la lista l se ira consumiendo a medida que itere
-#    #  estados.pop([])
+def cllambda (asf,states):
+    """ Funcion clausura lambda """
+    state_aux = sorted (states)
+    states_marcados = [False for s in state_aux]
+
+    c = 0
+    while (any(False == marcado for marcado in states_marcados)):
+        aux = state_aux[c]
+        states_marcados[c] = True
+
+        siguiente = asf["transtion"][aux].get('&',-100)
+        if siguiente != -100:
+            if not siguiente in set(state_aux):
+                state_aux.append(siguiente)
+                states_marcados.append(False)
+                
+        c += 1
+    return (set(state_aux))
 
 
 def mover (estado,sigma): #sea sigma un elemento de sigma :P

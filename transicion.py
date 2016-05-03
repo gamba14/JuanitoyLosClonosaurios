@@ -6,8 +6,8 @@ states = [cero ,uno ,dos ]
 cadena=input()
 state_i= 0
 
-for i in range(len(cadena)):
-    aux=states[state_i][cadena[i]]
+for c in cadena :
+    aux=states[state_i][c]
     state_i = aux
 if state_i == 1 or 2:
 	print("cadena valida")
