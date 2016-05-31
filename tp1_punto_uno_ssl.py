@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 
 import os.path
 import fileinput
@@ -278,16 +278,21 @@ def cllambda (asf,states):
     return (set(state_aux))
 
 
-def mover (estado,sigma): #sea sigma un elemento de sigma :P
+def mover (asd, estados, entrada):
     """ funcion mover """
     # TODO: implementar
-    pass
+    return set([ ])
     
 
 def isValid(asd, input):
     """Check if the input string is acepted by the Automata"""
-    # TODO: implementar, devolver True o False
-    pass
+    
+    estados = set([asd["init"]])
+    
+    for caracter in input:
+        estados = mover(asd, estados, caracter)
+    
+    return any(estado in asd["final"] for estado in estados)
 
 
 def main(argv):
@@ -322,7 +327,7 @@ def main(argv):
         if opt == '-h':
 
             # se informa la forma de uso correcto
-            print ('tp1_punto_uno_ssl.py -i <inputfile> -o <outputfile>')
+            print ('tp1_punto_uno_ssl.py -a <archivo_automata> -s <cadena>')
 
             # Se finaliza el scritp sin error
             sys.exit()
