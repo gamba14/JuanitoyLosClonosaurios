@@ -4,9 +4,11 @@ import os.path
 import fileinput
 import sys, getopt
 
+import tp1_punto_uno_ssl as uno
+
 # TODO Definir funciones y escribir el comportamiento esperado
 # TODO cambiar los comentarios donde corresponda
-# TODO importar funciones del punto uno
+# TODO cambiar comportamiento
 
 def main(argv):
     """Proceso principal"""
@@ -65,7 +67,7 @@ def main(argv):
     if (os.path.exists(path) and os.path.isfile(path)):
 
         # Parseo/Interpreto/(?) el archivo (como automata)
-        asf = parseFile(path)
+        asf = uno.parseFile(path)
 
         # Imprimo el resultado del parseo (me canse)
         print (asf) 
