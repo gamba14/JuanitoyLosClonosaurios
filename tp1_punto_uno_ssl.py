@@ -302,10 +302,35 @@ def cllambda (asf,states):
     return (set(state_aux))
 
 
-def mover (asd, estados, entrada):
+def mover (asf, estados, entrada):
     """ funcion mover """
+    
     # TODO: implementar
-    return set([ ])
+    # mover implica tomar un estado y un simbolo de entrada y devolver a que estado va con dicho simbolo
+    # hacer la cl-\( x.estado que se deriva de aplicar la funcion de transicion con el estado t y con el simbolo de entrada del alfabeto)
+    # entonces mover = P(k) X Sigma -> P(k)
+
+    t = asf["states"] #paso a t el set de los estados
+
+    ins = asf["inputs"] #paso a ins los elementos de sigma para poder aplicar la funcion mover ;)
+
+    tDeEstados = [] #tDeEstados es transicion de estados 
+
+    for estado_act in asf["states"]:
+
+        for sigma in asf["inputs"]:
+
+            #ahora x va a ser mi estado a calcular 
+
+            next_state = asf["transtion"][estado_act][sigma] #calculo para que lado va a ir con el estado siguiente
+
+            tDeEstados.append(next_state) # necesito esta lista? no lo sè, usala. despues vemos...
+
+            #ahora mover usa clausura lambda. como la voy construyendo de a poco voy a armar la lista
+
+            tDeEstados = cllambda(asf,tDeEstados)
+
+    return set([tDeEstados])
     
 
 def isValid(asd, input):
