@@ -190,20 +190,44 @@ def parseFinalStates(asf, line):
 def parseTransition(asf, line):
     """Obtengo de la linea la funcion de transicion"""
     """Creo por cada estado un nuevo diccionario con las transiciones"""
+
     cstates = 0
-    nrstate=[] #creo una lista vacia para el destino del estado
-    for character in line: #itero sobre el largo de la cadena
-        cstates=cstates+1 #este contador lo uso para validar si el caracter es un sigma o un estado
-        if character == '#': #si el caracter es el hash se termino el archivo y "nos vimo "
-            break
-        elif (cstates % 2 == 0):# si el numero de linea es par quiere decir que aca hay un sigma
-            sigma= character
-        elif not(cstates%2 == 0) and (cstates > 1): #tuve que poner esto por que me dio paja pensarlo de otra forma 
-            state= character                        #en si, dice que si no es par y no es el segundo caracter
-            nrstate.append((sigma,state))           # ya tengo sigma y estado siguiente , lo agrego a la lista vacia
-        else: pass
-    statebuilt=dict(nrstate) # construyo el diccionario a partir de la lista
-    asf["transtion"].append(statebuilt) # meto el diccionario a la lista de transiciones
+    nrstate = []  #creo una lista vacia para el destino del estado
+    
+    primer = True # bandera de primer caracter
+
+    try:
+
+        for character in line: #itero sobre el largo de la cadena
+            if (primer):
+                # el primer caracter es el estado "fuente" de la transicion
+                estadoActual = int(character)
+
+                # se compruebar esto en los siguientes caracteres
+                primer = False
+
+            else:
+                cstates = cstates + 1 #este contador lo uso para validar si el caracter es un sigma o un estado
+                
+                if character == '#': #si el caracter es el hash se termino el archivo y "nos vimo "
+                    break
+
+                elif not(cstates % 2 == 0): # si el numero de caracter no es par quiere decir que aca hay un sigma
+                    sigma = character
+
+                elif (cstates % 2 == 0):
+                    state = int(character)                    # en si, dice que si es par
+                    nrstate.append((sigma,state))             # ya tengo sigma y estado siguiente , lo agrego a la lista vacia
+                else: 
+                    pass
+
+        statebuilt = dict(nrstate) # construyo el diccionario a partir de la lista
+        asf["transtion"][estadoActual] = statebuilt # meto el diccionario a la lista de transiciones
+
+    except ValueError:
+        # Si algun valor no se puede convertir en numero, aviso que el
+        # formato no es valido y termino con el script
+        pass # TODO: implementar
     
                 
 
@@ -220,7 +244,7 @@ def parseFile(path):
         "inputs": set([]),
         "init": -1,
         "final": set([]),
-        "transtion": []
+        "transtion": {}
     }
 
     # Defino un dicionario por python no soporta el swich case 
