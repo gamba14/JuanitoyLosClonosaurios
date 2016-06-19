@@ -300,6 +300,7 @@ def cllambda (asf,states):
                 
         c += 1
     return (set(state_aux))
+    #return (state_aux) # test porpouse 
 
 
 def mover (asf, estados, entrada):
@@ -324,17 +325,24 @@ def mover (asf, estados, entrada):
 
             next_state = asf["transtion"][estado_act][sigma] #calculo para que lado va a ir con el estado siguiente
 
+            #print (next_state) # for debuggin porpouse 
+
+            #print (tDeEstados) # for debuggin porpouse (buena mi ingles ;) )
+
             tDeEstados.append(next_state) # necesito esta lista? no lo sè, usala. despues vemos...
 
             #ahora mover usa clausura lambda. como la voy construyendo de a poco voy a armar la lista
 
             tDeEstados = cllambda(asf,tDeEstados)
 
-    return set([tDeEstados])
+            tDeEstados = sorted(tDeEstados) # cada vez que llamo a la clausura lambda me devuelve un set
+
+    #return set([tDeEstados]) test
+    return tDeEstados 
     
 
 def isValid(asd, input):
-    """Check if the input string is acepted by the Automata"""
+    """Verificamos si la cadena es aceptada por el automata"""
     
     estados = set([asd["init"]])
     
