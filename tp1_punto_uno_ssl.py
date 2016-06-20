@@ -339,15 +339,15 @@ def isValid(asf, input):
     
     estados = cllambda(asf, set([asf["init"]]))
 
-    print "estado inicial: ", estados
+    print("estado inicial: ", estados)
     
     for caracter in input:
 
-        print "entrada: " + caracter
+        print("entrada: " + caracter)
 
         if caracter in asf["inputs"]:
             estados = mover(asf, estados, caracter)
-            print "mover: ", estados
+            print( "mover: ", estados)
 
         else:
             return False
