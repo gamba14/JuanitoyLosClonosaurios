@@ -192,7 +192,7 @@ def parseTransition(asf, line):
     """Creo por cada estado un nuevo diccionario con las transiciones"""
 
     cstates = 0
-    nrstate = []  #creo una lista vacia para el destino del estado
+    nrstate = {}  #creo un diccionario vacio para el destino del estado
     
     primer = True # bandera de primer caracter
 
@@ -217,12 +217,16 @@ def parseTransition(asf, line):
 
                 elif (cstates % 2 == 0):
                     state = int(character)                    # en si, dice que si es par
-                    nrstate.append((sigma,state))             # ya tengo sigma y estado siguiente , lo agrego a la lista vacia
+
+                    if sigma in nrstate:
+                        nrstate[sigma] |= {state}
+                    else:
+                        nrstate[sigma] = {state}                # ya tengo sigma y estado siguiente , lo agrego a la lista vacia
+
                 else: 
                     pass
 
-        statebuilt = dict(nrstate) # construyo el diccionario a partir de la lista
-        asf["transtion"][estadoActual] = statebuilt # meto el diccionario a la lista de transiciones
+        asf["transtion"][estadoActual] = nrstate # meto el diccionario a la lista de transiciones
 
     except ValueError:
         # Si algun valor no se puede convertir en numero, aviso que el
