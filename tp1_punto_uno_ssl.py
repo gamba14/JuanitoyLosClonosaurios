@@ -288,6 +288,7 @@ def parseFile(path):
 
 def cllambda (asf,states):
     """ Funcion clausura lambda """
+
     state_aux = sorted (states)
     states_marcados = [False for s in state_aux]
 
@@ -297,32 +298,35 @@ def cllambda (asf,states):
         states_marcados[c] = True
 
         siguiente = asf["transtion"][aux].get('&',-100)
-        if siguiente != -100:
-            if not siguiente in set(state_aux):
-                state_aux.append(siguiente)
-                states_marcados.append(False)
+        
+        if siguiente != -100:        
+            for x in siguiente:
+                if not x in set(state_aux):
+                    state_aux.append(x)
+                    states_marcados.append(False)
                 
         c += 1
+
     return (set(state_aux))
-    #return (state_aux) # test porpouse 
 
 
 def mover (asf, estados, entrada):
     """ funcion mover """
-    
+
     # mover implica tomar un estado y un simbolo de entrada y devolver a que estado va con dicho simbolo
     # hacer la cl-\( x.estado que se deriva de aplicar la funcion de transicion con el estado t y con el simbolo de entrada del alfabeto)
     # entonces mover = P(k) X Sigma -> P(k)
 
-    tDeEstados = [] #tDeEstados es transicion de estados 
+    tDeEstados = set([]) #tDeEstados es transicion de estados 
 
     for estado_act in estados:
 
         #ahora x va a ser mi estado a calcular 
 
-        next_state = asf["transtion"][estado_act][entrada] #calculo para que lado va a ir con el estado siguiente
+        funcion = asf["transtion"].get(estado_act, {})
+        next_state = funcion.get(entrada, set([])) #calculo para que lado va a ir con el estado siguiente
 
-        tDeEstados.append(next_state)
+        tDeEstados |= next_state
 
     
     tDeEstados = cllambda(asf,tDeEstados)
@@ -339,7 +343,7 @@ def isValid(asf, input):
     
     for caracter in input:
 
-        print "entrada " + caracter
+        print "entrada: " + caracter
 
         if caracter in asf["inputs"]:
             estados = mover(asf, estados, caracter)
