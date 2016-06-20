@@ -121,8 +121,8 @@ def parseInputs(asf, line):
     # Si el resultado NO es un valor absurdo 
     if (begin != -1):
 
-        # Obtengos los valores de la sub cadena comprendida entre las llaves
-        # y la almaceno como un conjunto en asf["inputs"] 
+    # Obtengos los valores de la sub cadena comprendida entre las llaves
+    # y la almaceno como un conjunto en asf["inputs"] 
         asf["inputs"] = set(parseValues(line[begin + 1:end]))
 
 
@@ -209,7 +209,7 @@ def parseTransition(asf, line):
             else:
                 cstates = cstates + 1 #este contador lo uso para validar si el caracter es un sigma o un estado
                 
-                if character == '#': #si el caracter es el hash se termino el archivo y "nos vimo "
+                if character == '#': #si el caracter es el hash se termino el archivo 
                     break
 
                 elif not(cstates % 2 == 0): # si el numero de caracter no es par quiere decir que aca hay un sigma
@@ -335,7 +335,7 @@ def isValid(asf, input):
     
     for caracter in input:
 
-        print "estrada " + caracter
+        print "entrada " + caracter
 
         if caracter in asf["inputs"]:
             estados = mover(asf, estados, caracter)
