@@ -306,50 +306,45 @@ def cllambda (asf,states):
 def mover (asf, estados, entrada):
     """ funcion mover """
     
-    # TODO: implementar
     # mover implica tomar un estado y un simbolo de entrada y devolver a que estado va con dicho simbolo
     # hacer la cl-\( x.estado que se deriva de aplicar la funcion de transicion con el estado t y con el simbolo de entrada del alfabeto)
     # entonces mover = P(k) X Sigma -> P(k)
 
-    t = asf["states"] #paso a t el set de los estados
-
-    ins = asf["inputs"] #paso a ins los elementos de sigma para poder aplicar la funcion mover ;)
-
     tDeEstados = [] #tDeEstados es transicion de estados 
 
-    for estado_act in asf["states"]:
+    for estado_act in estados:
 
-        for sigma in asf["inputs"]:
+        #ahora x va a ser mi estado a calcular 
 
-            #ahora x va a ser mi estado a calcular 
+        next_state = asf["transtion"][estado_act][entrada] #calculo para que lado va a ir con el estado siguiente
 
-            next_state = asf["transtion"][estado_act][sigma] #calculo para que lado va a ir con el estado siguiente
+        tDeEstados.append(next_state)
 
-            #print (next_state) # for debuggin porpouse 
+    
+    tDeEstados = cllambda(asf,tDeEstados)
 
-            #print (tDeEstados) # for debuggin porpouse (buena mi ingles ;) )
-
-            tDeEstados.append(next_state) # necesito esta lista? no lo sè, usala. despues vemos...
-
-            #ahora mover usa clausura lambda. como la voy construyendo de a poco voy a armar la lista
-
-            tDeEstados = cllambda(asf,tDeEstados)
-
-            tDeEstados = sorted(tDeEstados) # cada vez que llamo a la clausura lambda me devuelve un set
-
-    #return set([tDeEstados]) test
-    return tDeEstados 
+    return set(tDeEstados)
     
 
-def isValid(asd, input):
+def isValid(asf, input):
     """Verificamos si la cadena es aceptada por el automata"""
     
-    estados = set([asd["init"]])
+    estados = cllambda(asf, set([asf["init"]]))
+
+    print "estado inicial: ", estados
     
     for caracter in input:
-        estados = mover(asd, estados, caracter)
+
+        print "estrada " + caracter
+
+        if caracter in asf["inputs"]:
+            estados = mover(asf, estados, caracter)
+            print "mover: ", estados
+
+        else:
+            return False
     
-    return any(estado in asd["final"] for estado in estados)
+    return any(estado in asf["final"] for estado in estados)
 
 
 def main(argv):
