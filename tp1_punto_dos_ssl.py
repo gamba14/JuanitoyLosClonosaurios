@@ -1,4 +1,15 @@
-﻿#!/usr/bin/python
+﻿###############################################
+# T R A B A J O  P R A C T I C O   1          #
+# SINTAXIS Y SEMANTICA DE LOS LENGUAJES       #
+# UTN FACULTAD REGIONAL DELTA                 #  
+# GRUPO                                       #
+# INTEGRANTES :                               #
+#                POSADAS LIAUDAT, EMMANUEL    #
+#                GAMBIRASSI, AGUSTIN          #
+#                CALVI, RAFFI                 #
+# AÑO 2016                                    #
+###############################################   
+#!/usr/bin/python
 
 import os.path
 import fileinput
@@ -9,6 +20,50 @@ import tp1_punto_uno_ssl as uno
 # TODO Definir funciones y escribir el comportamiento esperado
 # TODO cambiar los comentarios donde corresponda
 # TODO cambiar comportamiento
+
+def createNew(asf):
+
+    # outputPath = out # sera la variable que contenga la ruta al archivo
+
+    # parseOut = open(out+'/out_ej2.txt','w') #creo y asigno el archivo a la variable parseOut
+
+    parseOut = open('testing_punto2.txt','w') #as it says "proposito de pruebas"
+
+    states = sorted(asf["states"])
+
+    init  = asf["init"]
+
+    final = sorted(asf["final"])
+
+    transtions = asf["transtion"]
+
+    states = uno.cllambda(asf, set([asf["init"]]))
+
+    newStates = []
+
+    for caracter in sorted(asf["inputs"]):
+
+        newState = uno.mover(asf, states, caracter)
+
+        newStates.append(newState)
+
+
+    # for elem in 
+
+    print(newStates)
+
+
+    newStr = "{"
+
+    for elem in sorted(asf["inputs"]):
+
+        newStr = newStr + elem + ","
+    
+    newStr = newStr + '}'
+
+    parseOut.write(newStr)
+
+
 
 def main(argv):
     """Proceso principal"""
@@ -54,14 +109,13 @@ def main(argv):
             path = arg
 
         # Si la opcion es '-s' o '--string'
-        elif opt in ("-s", "--string"):
-            # el argumento asociado es la cadena que se debe verificar si es 
-            # aceptada por el automata
-            inputString = arg
+        elif opt in ("-o", "--output"):
+            # propociona un archivo de salida
+            outputPath = arg
 
-            # Uso una bandera para informar que la cadena ya fue proporcionada 
+            # Uso una bandera para informar que el path ya fue proporcionado 
             # via argumento
-            withString  = True
+            withString  = False
 
     # Si la ruta es valida y corresponde a un archivo
     if (os.path.exists(path) and os.path.isfile(path)):
@@ -70,23 +124,24 @@ def main(argv):
         asf = uno.parseFile(path)
 
         # Imprimo el resultado del parseo (me canse)
-        print (asf) 
+        #print (asf) 
+        createNew(asf)
 
         # Si se dispone a cadena a comprobar
-        if (withString):
-
-            # Verifico que la cadena sea aceptada
-            if (isValid(asf, inputString)):
-                # Informo que es aceptada
-                print ("La cadena es aceptada por el automata") #TODO: mejorar el mensaje
-
-            else:
-                # Informo que NO es aceptada
-                print ("La cadena NO es aceptada por el automata") #TODO: mejorar el mensajepyt
-        else:
-            # leer las cadena que ingresa el usuario y chekear si cada una es 
-            # aceptada por el automata
-            print ("implementame (?)") # TODO implementar
+        #if (withString):
+#
+#        #    # Verifico que la cadena sea aceptada
+#        #    if (isValid(asf, inputString)):
+#        #        # Informo que es aceptada
+#        #        print ("La cadena es aceptada por el automata") #TODO: mejorar el mensaje
+#
+#        #    else:
+#        #        # Informo que NO es aceptada
+#        #        print ("La cadena NO es aceptada por el automata") #TODO: mejorar el mensajepyt
+#        #else:
+#        #    # leer las cadena que ingresa el usuario y chekear si cada una es 
+#        #    # aceptada por el automata
+        #    print ("implementame (?)") # TODO implementar
 
     else:
         # Si la ruta no es valida o no corresponde a un archivo

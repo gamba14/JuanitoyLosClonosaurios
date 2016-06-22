@@ -1,4 +1,16 @@
-﻿#!/usr/bin/python
+﻿###############################################
+# T R A B A J O  P R A C T I C O   1          #
+# SINTAXIS Y SEMANTICA DE LOS LENGUAJES       #
+# UTN FACULTAD REGIONAL DELTA                 #  
+# GRUPO                                       #
+# INTEGRANTES :                               #
+#                POSADAS LIAUDAT, EMMANUEL    #
+#                GAMBIRASSI, AGUSTIN          #
+#                CALVI, RAFFI                 #
+# AÑO 2016                                    #
+###############################################   
+
+#!/usr/bin/python
 
 import os.path
 import fileinput
@@ -314,7 +326,8 @@ def mover (asf, estados, entrada):
     """ funcion mover """
 
     # mover implica tomar un estado y un simbolo de entrada y devolver a que estado va con dicho simbolo
-    # hacer la cl-\( x.estado que se deriva de aplicar la funcion de transicion con el estado t y con el simbolo de entrada del alfabeto)
+    # hacer la cl-\( x.estado que se deriva de aplicar la funcion de transicion con el estado t y con el 
+    # simbolo de entrada del alfabeto)
     # entonces mover = P(k) X Sigma -> P(k)
 
     tDeEstados = set([]) #tDeEstados es transicion de estados 
@@ -423,22 +436,23 @@ def main(argv):
             # Verifico que la cadena sea aceptada
             if (isValid(asf, inputString)):
                 # Informo que es aceptada
-                print ("La cadena es aceptada por el automata") #TODO: mejorar el mensaje
+                print ("La cadena es aceptada por el automata") 
 
             else:
                 # Informo que NO es aceptada
-                print ("La cadena NO es aceptada por el automata") #TODO: mejorar el mensajepyt
+                print ("La cadena NO es aceptada por el automata") 
         else:
             # leer las cadena que ingresa el usuario y chekear si cada una es 
             # aceptada por el automata
-            print ("implementame (?)") # TODO implementar
+            print ("implementame (?)") 
 
     else:
         # Si la ruta no es valida o no corresponde a un archivo
-        print ("El archivo no es valido") # TODO: mejorar mensaje de error
+        print ("El archivo no es valido") 
 
 
-# Si el scritp es llamado directamente (Osea NO es importado como libreria)
+# Si el script es llamado directamente (Osea NO es importado como libreria)
+# Lo utilizo de esta forma para no repetir codigo en el punto 2
 if __name__ == "__main__":
     # Ejecuto el proceso principal con los argumentos exepto el primero que es 
     # el nombre del scritp
