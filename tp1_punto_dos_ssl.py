@@ -1,4 +1,5 @@
-﻿###############################################
+﻿#!/usr/bin/python
+###############################################
 # T R A B A J O  P R A C T I C O   1          #
 # SINTAXIS Y SEMANTICA DE LOS LENGUAJES       #
 # UTN FACULTAD REGIONAL DELTA                 #  
@@ -9,7 +10,7 @@
 #                CALVI, RAFFI                 #
 # AÑO 2016                                    #
 ###############################################   
-#!/usr/bin/python
+
 
 import os.path
 import fileinput
