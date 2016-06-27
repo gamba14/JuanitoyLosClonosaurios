@@ -71,13 +71,13 @@ def main(argv):
     # Variables que van a contener la informacion obtenida de los parametros
     path = ""
     inputString = ""
-    withString  = False
+    outPath = ""
 
     # Interpreto/Parseo/(?) los parametros
     try:
-        # Obtiene las opciones (-h, -a, --automata, -s, --string)
+        # Obtiene las opciones (-h, -i, --input, -o, --output)
         # los argumentos correspondientes a cada uno de ellos
-        opts, args = getopt.getopt(argv,"ha:s:",["automata=","string="])
+        opts, args = getopt.getopt(argv,"hi:o:",["input=","output="])
 
     except getopt.GetoptError:
         # Si hay alguna opcion invalida
@@ -97,27 +97,22 @@ def main(argv):
         if opt == '-h':
 
             # se informa la forma de uso correcto
-            print ('tp1_punto_dos_ssl.py -a <archivo_automata> -s <cadena>')
+            print ('tp1_punto_dos_ssl.py -i <inputfile> -o <outputfile>')
 
             # Se finaliza el scritp sin error
             sys.exit()
 
-        # Si la opcion es '-a' o '--automata'
-        elif opt in ("-a", "--automata"):
+        # Si la opcion es '-i' o '--input'
+        elif opt in ("-i", "--input"):
             # el argumento asociado es la ruta al archivo txt con el automata
             # a parsear/interpretar/(?)
             path = arg
 
-        # Si la opcion es '-s' o '--string'
+        # Si la opcion es '-o' o '--output'
         elif opt in ("-o", "--output"):
             # propociona un archivo de salida
-            outputPath = arg
+            outPath = arg
 
-            # Uso una bandera para informar que el path ya fue proporcionado 
-            # via argumento
-            withString  = False
-
-    # Si la ruta es valida y corresponde a un archivo
     if (os.path.exists(path) and os.path.isfile(path)):
 
         # Parseo/Interpreto/(?) el archivo (como automata)
@@ -126,22 +121,6 @@ def main(argv):
         # Imprimo el resultado del parseo (me canse)
         #print (asf) 
         createNew(asf)
-
-        # Si se dispone a cadena a comprobar
-        #if (withString):
-#
-#        #    # Verifico que la cadena sea aceptada
-#        #    if (isValid(asf, inputString)):
-#        #        # Informo que es aceptada
-#        #        print ("La cadena es aceptada por el automata") #TODO: mejorar el mensaje
-#
-#        #    else:
-#        #        # Informo que NO es aceptada
-#        #        print ("La cadena NO es aceptada por el automata") #TODO: mejorar el mensajepyt
-#        #else:
-#        #    # leer las cadena que ingresa el usuario y chekear si cada una es 
-#        #    # aceptada por el automata
-        #    print ("implementame (?)") # TODO implementar
 
     else:
         # Si la ruta no es valida o no corresponde a un archivo
