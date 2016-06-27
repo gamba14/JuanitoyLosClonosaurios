@@ -18,51 +18,173 @@ import sys, getopt
 
 import tp1_punto_uno_ssl as uno
 
-# TODO Definir funciones y escribir el comportamiento esperado
-# TODO cambiar los comentarios donde corresponda
-# TODO cambiar comportamiento
 
-def createNew(asf):
+def pasarADeteministico(asf):
+    """ Obtiene un automata deterministico de un automata"""
 
-    # outputPath = out # sera la variable que contenga la ruta al archivo
+    q0 = sorted(uno.cllambda(asf, { asf["init"] }))
 
-    # parseOut = open(out+'/out_ej2.txt','w') #creo y asigno el archivo a la variable parseOut
+    states = [q0]
+    states_marcados = [False for s in states]
 
-    parseOut = open('testing_punto2.txt','w') #as it says "proposito de pruebas"
+    transacciones = {}
 
-    states = sorted(asf["states"])
+    c = 0
+    while (any(False == marcado for marcado in states_marcados)):
+        t = states[c]
+        states_marcados[c] = True
 
-    init  = asf["init"]
+        for a in sorted(asf["inputs"]):
+            u = uno.mover(asf, set(t) , a)
 
-    final = sorted(asf["final"])
-
-    transtions = asf["transtion"]
-
-    states = uno.cllambda(asf, set([asf["init"]]))
-
-    newStates = []
-
-    for caracter in sorted(asf["inputs"]):
-
-        newState = uno.mover(asf, states, caracter)
-
-        newStates.append(newState)
+            us = sorted(u)
+            
+            if (not (us in states)):
+                states.append(us)
+                states_marcados.append(False)
 
 
-    # for elem in 
+            transaccion_aux = transacciones.get(str(t), {})
 
-    print(newStates)
+            transaccion_aux[a] = str(sorted(u))
+
+            transacciones[str(t)] = transaccion_aux
 
 
+        c += 1
+
+    finales = filter(lambda x: any(map(lambda y: y in asf['final'], x)), states)
+
+    return (states, asf["inputs"], q0, finales, transacciones)
+
+
+def pasarADeteministicoLegible(asf):
+    """ Construye un automata con los resultados de obtenerDetemistico """
+    estados, entradas, inicial, finales, transacciones = pasarADeteministico(asf)
+
+    deterministico = {
+        "states": set([]),
+        "inputs": set([]),
+        "init": -1,
+        "final": set([]),
+        "transtion": {}
+    }
+
+    deterministico['inputs'] = entradas
+
+    # original to 'pretty'
+    o_to_p = {}
+
+    # 'pretty' to orginal
+    p_to_o = {}
+
+
+    aux = [] 
+    c = 0
+    for x in estados:
+
+        o_to_p[str(x)] = c
+        p_to_o[c] = str(x)
+        
+        aux.append(c)
+
+        c += 1
+
+    deterministico['states'] = set(aux)
+
+
+    deterministico['init'] = o_to_p[str(inicial)]
+
+
+    aux = []
+    for x in finales:
+        aux.append(o_to_p[str(x)])
+
+    deterministico['final'] = set(aux)
+
+
+
+    deterministico['transtion'] = {}
+    for estado in estados:
+        
+        sEstado = str(estado)
+
+        transaccion_aux = {}
+
+        for entrada in entradas:
+            transaccion_aux[entrada] = o_to_p[ str(transacciones[sEstado][entrada]) ]
+
+        deterministico['transtion'][o_to_p[sEstado]] = transaccion_aux
+
+
+    print ('determistico', deterministico)
+    return deterministico
+
+
+def conjuntoToStr(lista):
+    """ Pasa una lista a un string con los elementos encerrrados entre corchetes """
     newStr = "{"
 
-    for elem in sorted(asf["inputs"]):
+    if (len(lista) != 0):
+        for elem in lista[0:-1]:
 
-        newStr = newStr + elem + ","
+            newStr += str(elem) + ","
+
+        newStr += str(lista[-1])
+        
     
-    newStr = newStr + '}'
+    newStr = newStr + '}\n'
+    
+    return newStr
 
+
+def transaccionesToStr(determ):
+    """ Convierte las transacciones a string """
+    newStr = ""
+
+    delta = determ['transtion']
+
+    for estado in sorted(determ['states']):
+
+        newStr += str(estado)
+
+        for entrada in sorted(determ['inputs']):
+            newStr += entrada + str(delta[estado][entrada])
+
+        newStr += "#\n"
+
+    return newStr
+
+
+def createNew(determ, outPath):
+    """ Escribe el automata deterministico en un archivo"""
+
+    parseOut = open(outPath,'w')
+
+    newStr = conjuntoToStr(sorted(determ["states"]))
     parseOut.write(newStr)
+
+    newStr = conjuntoToStr(sorted(determ["inputs"]))
+    parseOut.write(newStr)
+
+    newStr = conjuntoToStr([determ["init"]])
+    parseOut.write(newStr)
+
+    newStr = conjuntoToStr(sorted(determ["final"]))
+    parseOut.write(newStr)
+
+    newStr = transaccionesToStr(determ)
+    parseOut.write(newStr)
+
+
+def existOutputFile(outPath):
+    if (outPath != "" and os.path.isfile(outPath)):
+    
+        # TODO: preguntar se desea sobreescribir
+        #print ('El archivo ya existe ¿desea sobre escribirlo? [Y/n]')
+        # leer respuesta
+
+        pass #Sobreescribamos por el momento
 
 
 
@@ -114,14 +236,36 @@ def main(argv):
             # propociona un archivo de salida
             outPath = arg
 
+            if (os.path.exists(outPath)):
+                # se informa que el path No existe
+                print ('La ruta de salida NO es valida')
+
+                # Se finaliza el scritp sin error
+                sys.exit()
+
+
+    existOutputFile(outPath)
+
+
     if (os.path.exists(path) and os.path.isfile(path)):
 
         # Parseo/Interpreto/(?) el archivo (como automata)
         asf = uno.parseFile(path)
 
         # Imprimo el resultado del parseo (me canse)
-        #print (asf) 
-        createNew(asf)
+        print (asf) 
+
+        # Si NO se ingreso el archivo de salida, su usa uno por defecto
+        if (outPath == ""):
+            outPath = os.path.realpath(os.path.dirname(__file__)) + "/out.txt"
+
+            existOutputFile(outPath)
+
+        newAsf = pasarADeteministicoLegible(asf)
+
+        # Creo el nuevo archivo
+        createNew(newAsf, outPath) 
+
 
     else:
         # Si la ruta no es valida o no corresponde a un archivo
