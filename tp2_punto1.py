@@ -64,6 +64,14 @@ def estrategiaIncreible(gramatica):
     pass
 
 
+def evaluarCadena(gramatica, laTabla, cadena):
+    """ Evalua la cadena de entrada y muestra que producciones se usaron para crearla """
+
+    # TODO: implementar. (devolver como se derivo de la cadena, indicando producciones usadas)
+
+    pass
+
+
 def main(argv):
     """Proceso principal"""
 
