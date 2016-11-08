@@ -32,11 +32,68 @@ def parseFile(path):
 
 def clausure(gramatica, cjtoItems):
     """ Genera la clasura del conjuntu de items de salida """
-    
-    # formato de items (lado izquierdo, lado derecho, posicion prefijo)
-    # TODO: implementar. (devolver conjunto de items resultantes)
 
-    pass
+    # formato de items (lado izquierdo, lado derecho, posicion punto)
+
+    # cacheo los valores y redusco la verbosidad
+    vn    = gramatica.get("VN")
+    prods = gramatica.get("prods")
+    
+    # Creo una lista ordenada con los items del conjunto
+    listaItems = sorted(cjtoItems)
+    
+    # un indice para indicar que item estoy analizando
+    idx = 0
+
+    ##
+    # "Mientras alla items sin marcar" 
+    # - Teoria
+    #
+    # "Mientras el NO alla finalizado de recorrer la lista mutable y
+    # NO alla explotado la memoria en un loop infinto inentencional (?)"
+    # - Practica
+    ##
+    while (idx < len(listaItems)):
+        
+        # Creo un alias al item apuntado
+        item = listaItems[idx]
+
+        # Hago legible para mi mente los valores del item que voy a usar
+        ladoDerecho = item[1]
+        posPunto    = item[2]
+
+        # Mientras NO sea un item completo
+        if ( posPunto < len(ladoDerecho) ): 
+
+            # obtengo el simbolo que le sigue al punto
+            simboloApuntado = ladoDerecho[posPunto]
+
+            # Si el simbolo esta en el conjunto de los NO Terminales
+            if ( simboloApuntado in vn ):
+
+                # Obtengo todos los lados derechos de las producciones 
+                # del simbolo apuntado (NO Terminal)
+                ladosDerechos = prods.get(simboloApuntado)
+
+                # Para todos los lados derechos
+                for ld in ladosDerechos:
+
+                    # Creo un item
+                    nuevoItem = (simboloApuntado, ld, 0)
+
+                    # Si el item NO esta en la lista de items
+                    if ( not nuevoItem in listaItems ):
+
+                        # Lo agrego a la lista
+                        listaItems.append(nuevoItem)
+                
+        # Incremento idx sino explota todo
+        idx += 1
+
+    # TODO: Probar, testear, test me, cosa
+
+    # Convierto la lista en un conjunto
+    return set(listaItems)
 
 
 def calcuarSimbolosDeDesplazamiento(gramatica, cjtoItems):
