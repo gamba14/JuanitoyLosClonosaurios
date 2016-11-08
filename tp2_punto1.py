@@ -22,7 +22,7 @@ def parseFile(path):
         "VT": set([]), # no terminales
         "VN": set([]), # terminales
         "sInit": "",   # simbolo inicial
-        "prods": []    # produciones: [{ladoIzquiendo: ladoDerecho}]
+        "prods": []    # produciones: {ladoIzquiendo: [ladosDerechos] }
     }
 
     # TODO: implementar. (llenar el dicionario anterior)
