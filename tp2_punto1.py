@@ -19,8 +19,8 @@ def parseFile(path):
     """ Leeo la gramatica desde el archivo y la valido """
 
     gramatica = {
-        "VT": set([]), # no terminales
-        "VN": set([]), # terminales
+        "VN": set([]), # no terminales
+        "VT": set([]), # terminales
         "sInit": "",   # simbolo inicial
         "prods": []    # produciones: {ladoIzquiendo: [ladosDerechos] }
     }
