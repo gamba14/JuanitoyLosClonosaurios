@@ -8,7 +8,7 @@
 #                POSADAS LIAUDAT, EMMANUEL    #
 #                GAMBIRASSI, AGUSTIN          #
 #                CALVI, RAFFI                 #
-# AÑO 2016                                    #
+# ANIO 2016                                   #
 ###############################################   
 
 import os.path
