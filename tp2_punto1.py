@@ -145,7 +145,7 @@ def gotoL(gramatica, cjtoItems, simbolo):
 
 
 def estrategiaIncreible(gramatica):
-    """ Genera "la tabla" """
+    """ Genera "LA TABLA" """
 
     # TODO: implementar. (devolver tabla)
     # Tabla (dicionarios de diccionarios): {"estado": { simboloA: accion, simboloB: accion }}
