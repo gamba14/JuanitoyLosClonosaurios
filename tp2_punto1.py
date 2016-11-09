@@ -140,8 +140,34 @@ def gotoL(gramatica, cjtoItems, simbolo):
     """ Calcula el siguiente conjunto de items para el simbolo de entrada """
 
     #TODO: implementar. (conjunto de items)
+    	for item in cjtoItems:
 
-    pass
+      		if length(item[1]) > (item[2]):
+
+    			pass #TODO aca me tiene que devolver el item sin variar
+    				#ya que es un item completo
+    		else:		
+    			#como no era un item completo
+    			#corro el punto un lugar a la derecha
+    			item[2] += 1
+
+    			#ahora me quiero quedar con las partes que me interesan
+    			#para hacer la clausura
+
+    			ladoIzquierdo=item[0]
+    			ladoDerecho=item[1]
+
+    			next = ladoDerecho[item[2]]
+
+    			#TODO la clausra con next y el simbolo que entro
+    			# es recursivo?
+
+
+
+
+
+
+    
 
 
 def estrategiaIncreible(gramatica):
