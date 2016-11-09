@@ -164,8 +164,6 @@ def evaluarCadena(gramatica, laTabla, cadena):
 def main(argv):
     """Proceso principal"""
 
-    # TODO: adapatar para este practico
-
     # Variables que van a contener la informacion obtenida de los parametros
     path = ""
     inputString = ""
@@ -220,22 +218,28 @@ def main(argv):
     if (os.path.exists(path) and os.path.isfile(path)):
 
         # Parseo/Interpreto/(?) el archivo (como automata)
-        asf = parseFile(path)
+        gramatica = parseFile(path)
 
         # Imprimo el resultado del parseo (me canse)
-        print (asf) 
+        print (gramatica) 
+
+        # Genero "LA TABLA"
+        laTabla = estrategiaIncreible(gramatica)
+
+        # Imprimo la tabla generada
+        print (laTabla)
 
         # Si se dispone a cadena a comprobar
         if (withString):
 
             # Verifico que la cadena sea aceptada
-            if (isValid(asf, inputString)):
+            if (evaluarCadena(gramatica, laTabla, inputString)):
                 # Informo que es aceptada
-                print ("La cadena es aceptada por el automata") 
+                print ("La cadena es generada por la gramatica") 
 
             else:
                 # Informo que NO es aceptada
-                print ("La cadena NO es aceptada por el automata") 
+                print ("La cadena NO es generada por la gramatica") 
         else:
             # leer las cadena que ingresa el usuario y chekear si cada una es 
             # aceptada por el automata
