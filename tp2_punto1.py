@@ -99,9 +99,41 @@ def clausure(gramatica, cjtoItems):
 def calcuarSimbolosDeDesplazamiento(gramatica, cjtoItems):
     """ Calcula el subconjunto de V cuyos elementos pueden ser usados con gotoL """
 
-    #TODO: implementar. (devolver subconjunto de simbolos V)
+    # formato de items (lado izquierdo, lado derecho, posicion punto)
 
-    pass
+    # cacheo los valores y redusco la verbosidad
+    vt    = gramatica.get("VT")
+    vn    = gramatica.get("VN")
+    
+    # Creo una lista ordenada con los items del conjunto
+    listaItems = sorted(cjtoItems)
+
+    # creo un conjunto vacio
+    resultado = set()
+
+    # Para cada item en el conjunto
+    for item in cjtoItems:
+        
+        # Hago legible para mi mente los valores del item que voy a usar
+        ladoDerecho = item[1]
+        posPunto    = item[2]
+
+        # Mientras NO sea un item completo
+        if ( posPunto < len(ladoDerecho) ): 
+
+            # Obtengo el simbolo apuntado
+            simbolo = ladosDerechos[posPunto]
+
+            # Agrego el item al conjunto
+            resultado.add(simbolo)
+
+    # Un poco de paranoia no hace mal :V
+    assert resultado.issubset( vn.union(vt) ), "El resultado N= es un subconjunto de V!"
+    
+    # TODO: probar, testear, test me, cosa
+
+    # Devuelvo el resultado Duh!
+    return resultado
 
 
 def gotoL(gramatica, cjtoItems, simbolo):
