@@ -136,32 +136,34 @@ def calcuarSimbolosDeDesplazamiento(gramatica, cjtoItems):
     return resultado
 
 
-def gotoL(gramatica, cjtoItems, simbolo):
-    """ Calcula el siguiente conjunto de items para el simbolo de entrada """
+def goto(cjtoItems,caracter):
+    
+    #defino una variable donde voy a poner los items finales que van a estar en la clausura
+    listaAClausurar = []
+    
+    #defino una variable auxiliar donde voy a poner todos los items pertenecientes al conjunto en los cuales el punto este antes del caracter
+    aux = []
 
-    #TODO: implementar. (conjunto de items)
-    	for item in cjtoItems:
+    #para todos los items del conjunto
+    for item in cjtoItems:
+        
+        #pregunto si el caracter esta adelante del punto
+        if item[1][item[2]]== caracter:
+            
+            #agrego el item a un conjunto para seguirlo analizando despues
+            aux.append(item)
 
-      		if length(item[1]) > (item[2]):
+    #para todos los items que cumplen la condicion
+    for item in aux:
+        
+        #le adelanto el punto al item
+        itemAAnalizar = (item[0],item[1],item[2]+1)
 
-    			pass #TODO aca me tiene que devolver el item sin variar
-    				#ya que es un item completo
-    		else:		
-    			#como no era un item completo
-    			#corro el punto un lugar a la derecha
-    			item[2] += 1
+        #agrego este nuevo item a la lista que se va a clausurar
+        listaAClausurar.append(itemAAnalizar)
 
-    			#ahora me quiero quedar con las partes que me interesan
-    			#para hacer la clausura
-
-    			ladoIzquierdo=item[0]
-    			ladoDerecho=item[1]
-
-    			next = ladoDerecho[item[2]]
-
-    			#TODO la clausra con next y el simbolo que entro
-    			# es recursivo?
-
+    #hago la clausura de este conjunto que tiene todos los items con el punto adelante del caracter con el que estamos haciendo el goto
+    return clausure(gramatica,listaAClausurar)
 
 
 
