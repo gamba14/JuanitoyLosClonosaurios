@@ -167,6 +167,45 @@ def goto(cjtoItems,caracter):
 
 
 
+def automataYTabla(gramatica):
+
+    q0 = clausure(gramatica,sInit)
+
+    estados= [q0]
+
+    for estado in estados:
+
+        if length(estado[0][1]) == estado[0][2]:
+
+            #asociar estado con reduccion segun la produccion que este en el estado
+            #fijarse que estado es una lista de items, por eso pongo estado de [0], me fije y todos los estados que tienen items validos solo tienen a este item
+            #por eso pregunto solo por uno (verificar)
+
+        else:
+
+            #como no es item valido me fijo los goto
+
+            #simbolos es conjunto de todos los terminales y no terminales de la gramatica
+            #los simbolos que no vayan a ningun lado me van a devolver vacio
+            
+            for simbolo in (simbolos):
+
+                j = goto(estado,simbolo)
+
+                if not(j in estados):
+
+                    #no se si tira error cuando j es vacio
+
+                    estados.append(j)
+
+
+                    if simbolo in vn:
+
+                        #asocio en la tabla: estado con simbolo -> mover a j
+                
+                    else:
+
+                        #asocio en la tabla estado con simbolo -> desplazar a j 
 
 
     
