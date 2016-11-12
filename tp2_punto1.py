@@ -82,7 +82,7 @@ def parseInitState(gramatica, line):
 
         # Obtengo el valor del simbolo inicial desde la sub cadena comprendida
         # entre las llaves y la convierto a un numero entero
-        init = int(line[begin + 1:end]) # TODO: poner un try
+        init = line[begin + 1:end].strip()
         
         # Verifico que el valor obtenido sea un elemento del conjunto de estados
         if init in gramatica["VN"]:
