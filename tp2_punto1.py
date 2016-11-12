@@ -17,6 +17,8 @@ import sys, getopt
 
 import tp1_punto_uno_ssl as tp1
 
+from functools import partial
+
 # Contenido del archivo a parsear: 
 # {A,B}
 # {a,b,c,(,)}
@@ -157,9 +159,35 @@ def parseFile(path):
         "prods": []    # produciones: {ladoIzquierdo: [ladosDerechos] }
     }
 
-    # TODO: implementar. (llenar el dicionario anterior)
+    # Defino un dicionario por python no soporta el swich case 
+    # y porque son cool
+    parsers = {
+        # Cuando sea la primera linea del archivo, busco Simbolos NO terminales
+        0: partial(parseV, "VN"), # aplicacion parcial para el primer termino
 
-    pass
+        # Cuando sea la segunda linea del archivo, busco Simbolos Terminales
+        1: partial(parseV, "VT"), # aplicacion parcial para el primer termino
+
+        # Cuando sea la tercera linea del archivo, busco el simbolo incial
+        2: parseInitState,
+
+        # Solamento las primera tres lineas van a estar en el dicionario,
+        # las demas se consideran definiciones de producciones
+    }
+
+    # Asocio cada linea del archivo a un numero empezando por cero (0) 
+    # y recorro cada linea interpretandola (?)
+    for lineNumber, line in enumerate(fileinput.input(path)):
+        
+        # Busco el interprete(?) correspondiente para el numero de linea en el
+        # dicionario. Si NO se encuentra se usa parseProducciones
+        parser = parsers.get(lineNumber, parseProducciones)
+
+        # Ejecuto el interprete(?) correspondiente para la linea
+        parser(gramatica, line)
+
+    # Devuelvo el automata
+    return gramatica
 
 
 def clausure(gramatica, cjtoItems):
