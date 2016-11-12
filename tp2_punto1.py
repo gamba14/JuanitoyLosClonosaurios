@@ -15,6 +15,8 @@ import os.path
 import fileinput
 import sys, getopt
 
+import tp1_punto_uno_ssl as tp1
+
 # Contenido del archivo a parsear: 
 # {A,B}
 # {a,b,c,(,)}
@@ -31,6 +33,119 @@ import sys, getopt
 #       Conjunto de Terminales
 #       Simbolo destacado - Simbolo inicial
 #   Las demas lineas son Producciones
+
+def findArrow(string):
+    """ 
+    Devuelve la posicion donde empieza y donde termina la '=>' y
+    verifica que el string no empice con la flecha
+    """
+    # Busco el primer resulatdo de =>
+    begin = string.find("=>")
+
+    # calculo la posicion del segundo caracter
+    end = begin + 1
+
+    # Si no se encontro la flecha o no hay nada antes
+    if (begin <= 0):
+        #Se devuelve un valor absurdo
+        return (-1, -1)
+
+    # Si todo va bien devuelvo los valores encontrados
+    return (begin, end)
+
+
+
+def parseV(gramatica, cjtoDestino ,line):
+    """ Extraigo el conjunto de simbolos de la linea """
+    
+    # Busco la posiciones de las llaves
+    begin, end = tp1.findBraces(line)
+    
+    # Si el resultado NO es un valor absurdo 
+    if (begin != -1):
+
+        # Obtengos los valores de la sub cadena comprendida entre las llaves
+        # y la almaceno como un conjunto en la gramatica
+        gramatica[cjtoDestino]= set( tp1.parseValues(line[begin + 1:end]) )
+
+
+def parseInitState(gramatica, line):
+    """Obtengo el simbolo inicial desde la linea"""
+
+    # Busco la posiciones de las llaves
+    begin, end = tp1.findBraces(line)
+    
+    # Si el resultado NO es un valor absurdo 
+    if (begin != -1):
+
+        # Obtengo el valor del simbolo inicial desde la sub cadena comprendida
+        # entre las llaves y la convierto a un numero entero
+        init = int(line[begin + 1:end]) # TODO: poner un try
+        
+        # Verifico que el valor obtenido sea un elemento del conjunto de estados
+        if init in gramatica["VN"]:
+
+            # Almaceno el estado inicial en gramatica["init"]
+            gramatica["sInit"] = init
+
+        else:
+            pass #TODO: hacer algo cuando el formato no coincida
+
+    else:
+        pass # TODO: hacer algo cuando el formato no coincida
+    
+
+def parseProducciones(gramatica, line):
+    """ Obtengo las producciones desde la linea """
+    
+    # Busco la posiciones de la flecha
+    begin, end = findArrow(line)
+
+    # Si el resultado NO es un valor absurdo 
+    if (begin != -1):
+
+        # Hago un chache de VN y VT
+        vn = gramatica["VN"]
+        vt = gramatica["VT"]
+
+        # Creo la union de VN y VT
+        v  = vn.union(vt)
+
+        # Obtengo el lado izquierdo
+        ladoIzquierdo = line[0:begin].strip()
+
+        # Obtengo el lado derecho
+        ladoDerecho = line[(end + 1):].strip()
+
+        # Si el lado izquierdo NO es una cadena vacia y 
+        # pertenece a los simbolos NO terminales
+        if (ladoIzquierdo != '') and ( ladoIzquierdo in vn ):
+
+            # Obtengo las producciones asociadas a este lado izquierdo
+            # Si NO es encuentra obtengo una lista vacia
+            li_prods = gramatica["prods"].get(ladoIzquierdo, [])
+
+
+
+            # Si el lado derecho NO es una cadena vacia y 
+            # pertenece a los simbolos Terminales
+            if (ladoDerecho != '') and all(simbolo in v for simbolo in ladoDerecho ):
+
+                # Si el lado derecho No esta en las producciones assiocadas al lado izquierdo
+                if not ladoDerecho in li_prods:
+                    
+                    # Agregro el lado derecho a las produciones
+                    li_prods.append(ladosDerechos)
+
+                    # Actualizo la lista de producciones asoiciadas
+                    gramatica["prods"][ladoIzquierdo] = li_prods
+
+            else:
+                pass # TODO: tirar error cuando el formato NO coincida
+
+        else:
+            pass # TODO: tirar error cuando el formato NO coincida
+
 
 def parseFile(path):
     """ Leeo la gramatica desde el archivo y la valido """
