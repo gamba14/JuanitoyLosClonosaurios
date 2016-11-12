@@ -312,6 +312,7 @@ def automataYTabla(gramatica):
             #asociar estado con reduccion segun la produccion que este en el estado
             #fijarse que estado es una lista de items, por eso pongo estado de [0], me fije y todos los estados que tienen items validos solo tienen a este item
             #por eso pregunto solo por uno (verificar)
+            pass 
 
         else:
 
@@ -334,11 +335,12 @@ def automataYTabla(gramatica):
                     if simbolo in vn:
 
                         #asocio en la tabla: estado con simbolo -> mover a j
+                        pass
                 
                     else:
 
                         #asocio en la tabla estado con simbolo -> desplazar a j 
-
+                        pass
 
     
 
