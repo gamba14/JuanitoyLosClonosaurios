@@ -55,7 +55,7 @@ def findArrow(string):
 
 
 
-def parseV(gramatica, cjtoDestino ,line):
+def parseV(cjtoDestino, gramatica,line):
     """ Extraigo el conjunto de simbolos de la linea """
     
     # Busco la posiciones de las llaves
