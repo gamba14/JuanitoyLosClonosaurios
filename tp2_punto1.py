@@ -154,7 +154,7 @@ def parseFile(path):
         "VN": set([]), # no terminales
         "VT": set([]), # terminales
         "sInit": "",   # simbolo inicial
-        "prods": []    # produciones: {ladoIzquiendo: [ladosDerechos] }
+        "prods": []    # produciones: {ladoIzquierdo: [ladosDerechos] }
     }
 
     # TODO: implementar. (llenar el dicionario anterior)
