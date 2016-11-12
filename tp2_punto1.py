@@ -15,6 +15,23 @@ import os.path
 import fileinput
 import sys, getopt
 
+# Contenido del archivo a parsear: 
+# {A,B}
+# {a,b,c,(,)}
+# {A}
+# A->(A)Ba
+# A-> Bb
+# B->a
+# B->b
+# B->ccc
+
+# Explicacion:
+#   De la linea 1 a la 3 son elementos fijos :
+#       Conjunto de No terminales
+#       Conjunto de Terminales
+#       Simbolo destacado - Simbolo inicial
+#   Las demas lineas son Producciones
+
 def parseFile(path):
     """ Leeo la gramatica desde el archivo y la valido """
 
