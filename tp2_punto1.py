@@ -333,7 +333,7 @@ def automataYTabla(gramatica):
 
     for estado in estados:
 
-        if length(estado[0][1]) == estado[0][2]:
+        if len(estado[0][1]) == estado[0][2]:
 
             #asociar estado con reduccion segun la produccion que este en el estado
             #fijarse que estado es una lista de items, por eso pongo estado de [0], me fije y todos los estados que tienen items validos solo tienen a este item
