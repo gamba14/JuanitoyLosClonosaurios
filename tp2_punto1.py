@@ -38,11 +38,11 @@ from functools import partial
 
 def findArrow(string):
     """ 
-    Devuelve la posicion donde empieza y donde termina la '=>' y
+    Devuelve la posicion donde empieza y donde termina la '->' y
     verifica que el string no empice con la flecha
     """
-    # Busco el primer resulatdo de =>
-    begin = string.find("=>")
+    # Busco el primer resulatdo de ->
+    begin = string.find("->")
 
     # calculo la posicion del segundo caracter
     end = begin + 1
@@ -127,17 +127,15 @@ def parseProducciones(gramatica, line):
             # Si NO es encuentra obtengo una lista vacia
             li_prods = gramatica["prods"].get(ladoIzquierdo, [])
 
-
-
             # Si el lado derecho NO es una cadena vacia y 
             # pertenece a los simbolos Terminales
             if (ladoDerecho != '') and all(simbolo in v for simbolo in ladoDerecho ):
 
                 # Si el lado derecho No esta en las producciones assiocadas al lado izquierdo
                 if not ladoDerecho in li_prods:
-                    
+
                     # Agregro el lado derecho a las produciones
-                    li_prods.append(ladosDerechos)
+                    li_prods.append(ladoDerecho)
 
                     # Actualizo la lista de producciones asoiciadas
                     gramatica["prods"][ladoIzquierdo] = li_prods
@@ -156,7 +154,7 @@ def parseFile(path):
         "VN": set([]), # no terminales
         "VT": set([]), # terminales
         "sInit": "",   # simbolo inicial
-        "prods": []    # produciones: {ladoIzquierdo: [ladosDerechos] }
+        "prods": {}    # produciones: {ladoIzquierdo: [ladosDerechos] }
     }
 
     # Defino un dicionario por python no soporta el swich case 
