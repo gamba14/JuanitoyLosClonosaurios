@@ -347,7 +347,7 @@ def automataYTabla(gramatica):
             #simbolos es conjunto de todos los terminales y no terminales de la gramatica
             #los simbolos que no vayan a ningun lado me van a devolver vacio
             
-            for simbolo in (simbolos):
+            for simbolo in simbolos:
 
                 j = goto(estado,simbolo)
 
@@ -357,18 +357,65 @@ def automataYTabla(gramatica):
 
                     estados.append(j)
 
+                    #asocio en la tabla: estado con simbolo -> mover a j
 
-                    if simbolo in vn:
+#estado actual
+estadoA = q0
 
-                        #asocio en la tabla: estado con simbolo -> mover a j
-                        pass
+#creo un string para las producciones que se usaron
+produccionesUsadas =  []
+
+#devuelve true o false si la acepta o no
+def seguimiento(cadena):
+
+    #pongo un contador para saber en que parte de la cadena estoy
+    contador = -1
+
+    #para cada caracter de la cadena
+    for carcater in cadena:
+        
+        contador += 1
+
+            #me fijo que es lo que tengo que hacer cuando estoy en ese estado y me entra ese caracter
+            #esto devuelve el par que mande por whatsapp
+            accion = tabla(estadoA,caracter)
+        
+            #pregunto por la primer parte
+            #use el case de pascal jaja no se como sera en python, si no se puede hacemos if y listo
+            case accion[0]:
                 
-                    else:
+                #mover y desplazar hacen lo mismo usando este algoritmo asi que no hay que diferenciarlos
+                #mover: cambio el estado y avanzo uno en la cadena
+                m: estadoA = accion[1]
+                
+                #reducir:              
+                r: 
+                    
+                    #me fijo el item por el cual reduci
+                    #al final no uso la parte derecha de la tupla que me diria por cual prod reducir porque los estados en los que se reduce
+                    #tienen solamente un item completo y este item tiene la produccion que tenemos que usar
+                    item = estadoA[0]
+                    
+                    #agrego el item a la lista
+                    #seria mas una lista de items completos, habria que ver como lo imprimimos
+                    produccionesUsadas.append(item)
+                    
+                    #pongo el estado inicial como actual
+                    estadoA = q0
+                    
+                    #vuelvo a entrar al algoritmo pero saco todo lo que esta del lado derecho de la produccion y lo pongo por el lado izquierdo        
+                    #le mande a lo haskell no se como sera lo de las cadenas en python
+                    cadenaNueva = take(contador - length(item[1]) + 1 , cadena)++ item[0] ++ drop(contador + 1,cadena) 
+                    
+                    seguimiento(cadenaNueva)
+                
+                #aceptar
+                a: return True
+                
+                #cancelar
+                else : return False
 
-                        #asocio en la tabla estado con simbolo -> desplazar a j 
-                        pass
 
-    
 
 
 def estrategiaIncreible(gramatica):
