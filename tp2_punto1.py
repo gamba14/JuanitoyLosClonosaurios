@@ -376,44 +376,46 @@ def seguimiento(cadena):
         
         contador += 1
 
-            #me fijo que es lo que tengo que hacer cuando estoy en ese estado y me entra ese caracter
-            #esto devuelve el par que mande por whatsapp
-            accion = tabla(estadoA,caracter)
-        
-            #pregunto por la primer parte
-            #use el case de pascal jaja no se como sera en python, si no se puede hacemos if y listo
-            case accion[0]:
+        #me fijo que es lo que tengo que hacer cuando estoy en ese estado y me entra ese caracter
+        #esto devuelve el par que mande por whatsapp
+        accion = tabla(estadoA,caracter)
+    
+        #pregunto por la primer parte
+        #use el case de pascal jaja no se como sera en python, si no se puede hacemos if y listo
+        if accion[0] == 'm':
+            
+            #mover y desplazar hacen lo mismo usando este algoritmo asi que no hay que diferenciarlos
+            #mover: cambio el estado y avanzo uno en la cadena
+            estadoA = accion[1]
+
+        elif accion[0] == 'r':  
+            #reducir:       
                 
-                #mover y desplazar hacen lo mismo usando este algoritmo asi que no hay que diferenciarlos
-                #mover: cambio el estado y avanzo uno en la cadena
-                m: estadoA = accion[1]
-                
-                #reducir:              
-                r: 
-                    
-                    #me fijo el item por el cual reduci
-                    #al final no uso la parte derecha de la tupla que me diria por cual prod reducir porque los estados en los que se reduce
-                    #tienen solamente un item completo y este item tiene la produccion que tenemos que usar
-                    item = estadoA[0]
-                    
-                    #agrego el item a la lista
-                    #seria mas una lista de items completos, habria que ver como lo imprimimos
-                    produccionesUsadas.append(item)
-                    
-                    #pongo el estado inicial como actual
-                    estadoA = q0
-                    
-                    #vuelvo a entrar al algoritmo pero saco todo lo que esta del lado derecho de la produccion y lo pongo por el lado izquierdo        
-                    #le mande a lo haskell no se como sera lo de las cadenas en python
-                    cadenaNueva = take(contador - length(item[1]) + 1 , cadena)++ item[0] ++ drop(contador + 1,cadena) 
-                    
-                    seguimiento(cadenaNueva)
-                
-                #aceptar
-                a: return True
-                
-                #cancelar
-                else : return False
+            #me fijo el item por el cual reduci
+            #al final no uso la parte derecha de la tupla que me diria por cual prod reducir porque los estados en los que se reduce
+            #tienen solamente un item completo y este item tiene la produccion que tenemos que usar
+            item = estadoA[0]
+            
+            #agrego el item a la lista
+            #seria mas una lista de items completos, habria que ver como lo imprimimos
+            produccionesUsadas.append(item)
+            
+            #pongo el estado inicial como actual
+            estadoA = q0
+            
+            # vuelvo a entrar al algoritmo pero saco todo lo que esta del lado derecho de la produccion y lo pongo por el lado izquierdo
+            # Traducido a python
+            cadenaNueva = cadena[:(contador - len(item[1]) + 1)] + item[0] + cadena[(contador + 1):]
+            
+            seguimiento(cadenaNueva)
+            
+        elif accion[0] == 'a':
+            #aceptar
+            return True
+            
+        else : 
+            #cancelar
+            return False
 
 
 
