@@ -445,8 +445,7 @@ def agregarProduccionAuxiliar(gramatica, prodsNumeradas):
     prodsNumeradas[-1] = (nuevoVN, ladoDerecho)
 
 
-
-def seguimiento(produccionesNumeradas, tabla, cadena):
+def seguimiento(prodsNumeradas, tabla, cadena):
     """ devuelve true o false si la acepta o no """
 
     # El numero de las producciones usadas
@@ -461,88 +460,90 @@ def seguimiento(produccionesNumeradas, tabla, cadena):
     # Inicio la pila en q0
     pila = [0]
 
-    #para cada caracter de la cadena
-    for contador, carcater in enumerate(cadena):
-        
-        desplazar = False
+    # Indica la posicion en la cadena
+    contador = 0
 
-        # En caso de error
-        if error:
-            # Rompo el for loop
-            break
+    # para NO avanazar hasta que el la flad diga lo contrario
+    while contador < len(cadena) and not cadenaEsAcepta and not error:
 
-        # Assercion por la NO se termino de recorrer la cadena y se indico como aceptada
-        assert cadenaEsAcepta, "La cadena ya esta aceptada NO debiria seguir ejecutandose"
+        # Me fijo en el tope de la tabla
+        estado = pila[-1]
 
-        # para NO avanazar hasta que el la flad diga lo contrario
-        while not desplazar and not error:
+        caracter = cadena[contador]
 
-            # Me fijo en el tope de la tabla
+        print "pila: ", pila, "\tcaracter: ", caracter
+
+        #me fijo que es lo que tengo que hacer cuando estoy en ese estado y me entra ese caracter
+        #esto devuelve el par que mande por whatsapp
+        accion = tabla[estado][caracter]
+
+        print "accion: ", accion
+
+        # Asercion, un estado y un terminal nunca puede dar una accion 'm'
+        assert accion[0] != 'm', "La accion mover nunca debe ser usada en este punto"
+    
+        if accion[0] == 'd':
+            # Agrego el estado a la pila
+            pila.append(accion[1])
+
+            # Avanzo al siguiente elemento de la cadena
+            contador += 1
+
+        elif accion[0] == 'r':  
+            #reducir:       
+
+            # Obtengo las producciones
+            produccion = prodsNumeradas[accion[1]]
+
+            # Obtegengo el lado derecho de la produccion
+            ladoDerecho = produccion[1]
+
+            # Obtengo la longitud del lado derecho
+            n = len(ladoDerecho)
+
+            # elemino los n ultimos de la pila
+            for i in xrange(n):
+                pila.pop()
+
+            # Agrego el numero de la produccion usada para la reduccion
+            produccionesUsadas.append(accion[1])
+
+            # Obtegengo el lado izquierdo de la produccion
+            ladoIzquierdo = produccion[0]
+
+            # Obtengo el nuevo estado
             estado = pila[-1]
 
-            #me fijo que es lo que tengo que hacer cuando estoy en ese estado y me entra ese caracter
-            #esto devuelve el par que mande por whatsapp
-            accion = tabla(estado, caracter)
+            print "pila: ", pila, "\tcaracter: ", caracter
 
-            # Asercion, un estado y un terminal nunca puede dar una accion 'm'
-            assert accion[0] != 'm', "La accion mover nunca debe ser usada en este punto"
-        
-            if accion[0] == 'd':
-                # Agrego el estado a la pila
-                pila.append(accion[1])
+            # Obtengo la accion para el lado izquierdo
+            accion = tabla[estado][ladoIzquierdo]
 
-                # Avanzo al siguiente elemento de la cadena
-                desplazar = True
+            print "accion: ", accion
 
-            elif accion[0] == 'r':  
-                #reducir:       
+            # Asercion, la accion 'm' solo se debe usar aca
+            assert accion[0] == 'm', "la accion siempre tiene que ser mover en este punto"
 
-                # Obtengo las producciones
-                produccion = produccionesNumeradas[accion[1]]
+            # Agrego el estado a la pila
+            pila.append(accion[1])
 
-                # Obtegengo el lado derecho de la produccion
-                ladoDerecho = producion[1]
+            
+        elif accion[0] == 'a':
+            #aceptar
+            cadenaEsAcepta = True
 
-                # Obtengo la longitud del lado derecho
-                n = len(ladoDerecho)
+            #assert cadenaEsAcepta, "La cadena ya esta aceptada NO debiria seguir ejecutandose"
 
-                # elemino los n ultimos de la pila
-                for i in xrange(n):
-                    pila.pop()
+        else : 
+            #cancelar
+            cadenaEsAcepta = False
 
-                # Agrego el numero de la produccion usada para la reduccion
-                produccionesUsadas.append(accion[1])
+            # Para romper el while loop
+            error = True
 
-                # Obtegengo el lado izquierdo de la produccion
-                ladoIzquierdo = producion[0]
-
-                # Obtengo la accion para el lado izquierdo
-                accion = tabla(estado, ladoIzquierdo)
-
-                # Asercion, la accion 'm' solo se debe usar aca
-                assert accion[0] == 'm', "la accion siempre tiene que ser mover en este punto"
-
-                # Agrego el estado a la pila
-                pila.append(accion[1])
-
-                # indico que NO me deplazo
-                desplazar = False
+            print accion
                 
-            elif accion[0] == 'a':
-                #aceptar
-                cadenaEsAcepta = True
-
-                # Para romper el while loop
-                desplazar = True
-
-            else : 
-                #cancelar
-                cadenaEsAcepta = False
-
-                # Para romper el while loop
-                error = True
-                
-
+    print ('')
     # Devuelvo si la cadena es aceptado y las producciones usadas para crear la cadena (si corresponde)
     return (cadenaEsAcepta, produccionesUsadas)
 
