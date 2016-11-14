@@ -708,11 +708,11 @@ def evaluarCadena(prodsNumeradas, laTabla, cadena):
     while not len(prodsUsadas) <= 0:
 
         # TODO: mejorar esto
-
         prod = prodsUsadas.pop()
 
-        if not prod == -1:
-            print  prodsNumeradas[prod][0], '->', prodsNumeradas[prod][1]
+        #if not prod == -1:
+        print  prodsNumeradas[prod][0], '->', prodsNumeradas[prod][1]
+
 
     print ('')
 
@@ -779,20 +779,20 @@ def main(argv):
         gramatica, produccionesNumeradas = parseFile(path)
 
         # Imprimo el resultado del parseo (me canse)
-        print (gramatica) 
-        print ('')
-        print (produccionesNumeradas)
-        print ('')
+        # print (gramatica) 
+        # print ('')
+        # print (produccionesNumeradas)
+        # print ('')
 
         # Agrego la produccion auxiliar
         agregarProduccionAuxiliar(gramatica, produccionesNumeradas)
 
         # Imprimo el resultado (for debug)
-        #print ('Gramatica con produccion auxiliar')
-        #print (gramatica) 
-        #print ('')
-        #print (produccionesNumeradas)
-        #print ('')
+        print ('Gramatica con produccion auxiliar')
+        print (gramatica) 
+        print ('')
+        print (produccionesNumeradas)
+        print ('')
 
         # Genero "LA TABLA"
         laTabla = estrategiaIncreible(gramatica, produccionesNumeradas)
