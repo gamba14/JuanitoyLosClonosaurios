@@ -319,7 +319,7 @@ def calcuarSimbolosDeDesplazamiento(gramatica, cjtoItems):
     return resultado
 
 
-def goto(cjtoItems,caracter):
+def goto(gramatica, cjtoItems, caracter):
     
     #defino una variable donde voy a poner los items finales que van a estar en la clausura
     listaAClausurar = []
@@ -346,7 +346,7 @@ def goto(cjtoItems,caracter):
         listaAClausurar.append(itemAAnalizar)
 
     #hago la clausura de este conjunto que tiene todos los items con el punto adelante del caracter con el que estamos haciendo el goto
-    return clausure(gramatica,listaAClausurar)
+    return clausure(gramatica, listaAClausurar)
 
 
 def agregarProduccionAuxiliar(gramatica, prodsNumeradas):
