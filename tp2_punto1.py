@@ -692,7 +692,7 @@ def estrategiaIncreible(gramatica, prodsNumeradas):
                 # Si esto pasa algo anda mal..
                 assert False, "Error al generar la tabla"
 
-
+    print 'Estados con Items: '
     print estadosItems
     print ''
 
@@ -703,6 +703,8 @@ def evaluarCadena(prodsNumeradas, laTabla, cadena):
     """ Evalua la cadena de entrada y muestra que producciones se usaron para crearla """
 
     cadenaEsAcepta, prodsUsadas =  seguimiento(prodsNumeradas, laTabla, cadena)
+
+    print 'Producciones usadas:'
 
     # Imprimo las producciones que generan la cadena
     while not len(prodsUsadas) <= 0:
@@ -779,6 +781,8 @@ def main(argv):
         gramatica, produccionesNumeradas = parseFile(path)
 
         # Imprimo el resultado del parseo (me canse)
+        # print ('')
+        # print ('Gramatica: ')
         # print (gramatica) 
         # print ('')
         # print (produccionesNumeradas)
@@ -788,9 +792,11 @@ def main(argv):
         agregarProduccionAuxiliar(gramatica, produccionesNumeradas)
 
         # Imprimo el resultado (for debug)
-        print ('Gramatica con produccion auxiliar')
+        print ('')
+        print ('Gramatica con produccion auxiliar: ')
         print (gramatica) 
         print ('')
+        print ('Producciones numeradas')
         print (produccionesNumeradas)
         print ('')
 
@@ -798,6 +804,7 @@ def main(argv):
         laTabla = estrategiaIncreible(gramatica, produccionesNumeradas)
 
         # Imprimo la tabla generada
+        print "La Tabla: "
         print (laTabla)
         print ('')
 
@@ -808,18 +815,22 @@ def main(argv):
             if (evaluarCadena(produccionesNumeradas, laTabla, inputString + '#')):
                 # Informo que es aceptada
                 print ("La cadena es generada por la gramatica") 
+                print ''
 
             else:
                 # Informo que NO es aceptada
                 print ("La cadena NO es generada por la gramatica") 
+                print ''
         else:
             # leer las cadena que ingresa el usuario y chekear si cada una es 
             # aceptada por el automata
             print ("implementame (?)") 
+            print ''
 
     else:
         # Si la ruta no es valida o no corresponde a un archivo
         print ("El archivo no es valido") 
+        print ''
 
 
 
