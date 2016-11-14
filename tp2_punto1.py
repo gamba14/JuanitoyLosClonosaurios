@@ -359,63 +359,86 @@ def automataYTabla(gramatica):
 
                     #asocio en la tabla: estado con simbolo -> mover a j
 
-#estado actual
-estadoA = q0
 
-#creo un string para las producciones que se usaron
-produccionesUsadas =  []
+def seguimiento(produccionesNumeradas, tabla, cadena):
+    """ devuelve true o false si la acepta o no """
 
-#devuelve true o false si la acepta o no
-def seguimiento(cadena):
+    produccionesUsadas = []
 
-    #pongo un contador para saber en que parte de la cadena estoy
-    contador = -1
+    analisisFinalizado   = False
+    cadenaEsAcepta       = False
+
+    # Inicio la pila en q0
+    pila = [0]
 
     #para cada caracter de la cadena
-    for carcater in cadena:
+    for contador, carcater in enumerate(cadena):
         
-        contador += 1
+        desplazar = False
 
-        #me fijo que es lo que tengo que hacer cuando estoy en ese estado y me entra ese caracter
-        #esto devuelve el par que mande por whatsapp
-        accion = tabla(estadoA,caracter)
-    
-        #pregunto por la primer parte
-        #use el case de pascal jaja no se como sera en python, si no se puede hacemos if y listo
-        if accion[0] == 'm':
-            
-            #mover y desplazar hacen lo mismo usando este algoritmo asi que no hay que diferenciarlos
-            #mover: cambio el estado y avanzo uno en la cadena
-            estadoA = accion[1]
+        while not desplazar:
 
-        elif accion[0] == 'r':  
-            #reducir:       
+            # Me fijo en el tope de la tabla
+            estado = pila[-1]
+
+            #me fijo que es lo que tengo que hacer cuando estoy en ese estado y me entra ese caracter
+            #esto devuelve el par que mande por whatsapp
+            accion = tabla(estado, caracter)
+        
+            if accion[0] == 'd':
+                # Agrego el estado a la pila
+                pila.append(accion[1])
+
+                # Avanzo al siguiente elemento de la cadena
+                desplazar = True
+
+            if accion[0] == 'm':
+                #mover: 
+               
+                # Agrego el estado a la pila
+                pila.append(accion[1])
+
+            elif accion[0] == 'r':  
+                #reducir:       
                 
-            #me fijo el item por el cual reduci
-            #al final no uso la parte derecha de la tupla que me diria por cual prod reducir porque los estados en los que se reduce
-            #tienen solamente un item completo y este item tiene la produccion que tenemos que usar
-            item = estadoA[0]
-            
-            #agrego el item a la lista
-            #seria mas una lista de items completos, habria que ver como lo imprimimos
-            produccionesUsadas.append(item)
-            
-            #pongo el estado inicial como actual
-            estadoA = q0
-            
-            # vuelvo a entrar al algoritmo pero saco todo lo que esta del lado derecho de la produccion y lo pongo por el lado izquierdo
-            # Traducido a python
-            cadenaNueva = cadena[:(contador - len(item[1]) + 1)] + item[0] + cadena[(contador + 1):]
-            
-            seguimiento(cadenaNueva)
-            
-        elif accion[0] == 'a':
-            #aceptar
-            return True
-            
-        else : 
-            #cancelar
-            return False
+                # XXX: trabajando aca me falta ver el goto que dice la fotocopia,
+                # Estoy viendo el seguiemiento de la pila que hace herman
+
+                # Obtengo las producciones
+                produccion = produccionesNumeradas[accion[1]]
+
+                # Obtegengo el lado derecho de la produccion
+                ladoDerecho = producion[1]
+
+                # Obtengo la longitud del lado derecho
+                n = len(ladoDerecho)
+
+                # elemino los n ultimos de la pila
+                for i in xrange(n)
+                    pila.pop()
+
+                #agrego el item a la lista
+                #seria mas una lista de items completos, habria que ver como lo imprimimos
+                produccionesUsadas.append(accion[1])
+                
+                
+            elif accion[0] == 'a':
+                #aceptar
+                cadenaEsAcepta = True
+
+                # Para romper el while loop
+                desplazar = True
+
+            else : 
+                #cancelar
+                cadenaEsAcepta = False
+
+                # Para romper el while loop
+                desplazar = True
+                
+
+    # Devuelvo si la cadena es aceptado y las producciones usadas para crear la cadena (si corresponde)
+    return (cadenaEsAcepta, produccionesUsadas)
 
 
 
