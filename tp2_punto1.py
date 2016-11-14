@@ -423,8 +423,10 @@ def seguimiento(cadena):
 def estrategiaIncreible(gramatica):
     """ Genera "LA TABLA" """
 
-    # TODO: implementar. (devolver tabla)
+    # TODO: implementar. (devolver tabla y producciones Numeradas)
+    # Producciones Numeradas {numero: produccion}
     # Tabla (dicionarios de diccionarios): {"estado": { simboloA: accion, simboloB: accion }}
+    # Accion ("incial de la accion", "item o produccion sobre la cual hacer la accion")
 
     pass
 
