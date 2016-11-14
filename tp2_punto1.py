@@ -475,7 +475,7 @@ def seguimiento(prodsNumeradas, tabla, cadena):
 
         #me fijo que es lo que tengo que hacer cuando estoy en ese estado y me entra ese caracter
         #esto devuelve el par que mande por whatsapp
-        accion = tabla[estado][caracter]
+        accion = tabla[estado].get(caracter, ('e',-1)) # e de error
 
         print "accion: ", accion
 
@@ -517,15 +517,20 @@ def seguimiento(prodsNumeradas, tabla, cadena):
             print "pila: ", pila, "\tcaracter: ", caracter
 
             # Obtengo la accion para el lado izquierdo
-            accion = tabla[estado][ladoIzquierdo]
+            accion = tabla[estado].get(ladoIzquierdo, ('e',-1)) # e de error
 
             print "accion: ", accion
 
-            # Asercion, la accion 'm' solo se debe usar aca
-            assert accion[0] == 'm', "la accion siempre tiene que ser mover en este punto"
+            # Asercion, la accion 'm' solo se debe usar aca (o error)
+            assert accion[0] == 'm' or accion[0] == 'e' , "la accion siempre tiene que ser mover en este punto"
 
-            # Agrego el estado a la pila
-            pila.append(accion[1])
+            # Si es error
+            if accion[0] == 'e':
+                error = True
+
+            else:
+                # Agrego el estado a la pila
+                pila.append(accion[1])
 
             
         elif accion[0] == 'a':
