@@ -517,12 +517,8 @@ def seguimiento(prodsNumeradas, tabla, cadena):
             print ("pila: ", pila, "\tcaracter: ", caracter)
 
             # Obtengo la accion para el lado izquierdo
-<<<<<<< HEAD
-            accion = tabla[estado].get(ladoIzquierdo, ('e',-1)) # e de error
-=======
 
-            accion = tabla[estado][ladoIzquierdo]
->>>>>>> de0ced7adbb9e685ffc7874f31ec599fec5cc123
+            accion = tabla[estado].get(ladoIzquierdo, ('e',-1)) # e de error
 
             print ("accion: ", accion)
 
