@@ -1,6 +1,6 @@
 #!/usr/bin/python
 ###############################################
-# T R A B A J O  P R A C T I C O   1          #
+# T R A B A J O  P R A C T I C O   2          #
 # SINTAXIS Y SEMANTICA DE LOS LENGUAJES       #
 # UTN FACULTAD REGIONAL DELTA                 #  
 # GRUPO                                       #
@@ -218,7 +218,7 @@ def clausure(gramatica, cjtoItems):
 
     # formato de items (lado izquierdo, lado derecho, posicion punto)
 
-    # cacheo los valores y redusco la verbosidad
+    # cacheo los valores y reduzco la verbosidad
     vn    = gramatica.get("VN")
     prods = gramatica.get("prods")
     
@@ -471,13 +471,13 @@ def seguimiento(prodsNumeradas, tabla, cadena):
 
         caracter = cadena[contador]
 
-        print "pila: ", pila, "\tcaracter: ", caracter
+        print ("pila: ", pila, "\tcaracter: ", caracter)
 
         #me fijo que es lo que tengo que hacer cuando estoy en ese estado y me entra ese caracter
         #esto devuelve el par que mande por whatsapp
         accion = tabla[estado][caracter]
 
-        print "accion: ", accion
+        print ("accion: ", accion)
 
         # Asercion, un estado y un terminal nunca puede dar una accion 'm'
         assert accion[0] != 'm', "La accion mover nunca debe ser usada en este punto"
@@ -502,7 +502,7 @@ def seguimiento(prodsNumeradas, tabla, cadena):
             n = len(ladoDerecho)
 
             # elemino los n ultimos de la pila
-            for i in xrange(n):
+            for i in range(n):
                 pila.pop()
 
             # Agrego el numero de la produccion usada para la reduccion
@@ -514,12 +514,13 @@ def seguimiento(prodsNumeradas, tabla, cadena):
             # Obtengo el nuevo estado
             estado = pila[-1]
 
-            print "pila: ", pila, "\tcaracter: ", caracter
+            print ("pila: ", pila, "\tcaracter: ", caracter)
 
             # Obtengo la accion para el lado izquierdo
+
             accion = tabla[estado][ladoIzquierdo]
 
-            print "accion: ", accion
+            print ("accion: ", accion)
 
             # Asercion, la accion 'm' solo se debe usar aca
             assert accion[0] == 'm', "la accion siempre tiene que ser mover en este punto"
@@ -541,7 +542,7 @@ def seguimiento(prodsNumeradas, tabla, cadena):
             # Para romper el while loop
             error = True
 
-            print accion
+            print (accion)
                 
     print ('')
     # Devuelvo si la cadena es aceptado y las producciones usadas para crear la cadena (si corresponde)
@@ -692,9 +693,9 @@ def estrategiaIncreible(gramatica, prodsNumeradas):
                 # Si esto pasa algo anda mal..
                 assert False, "Error al generar la tabla"
 
-    print 'Estados con Items: '
-    print estadosItems
-    print ''
+    print ('Estados con Items: ')
+    print (estadosItems)
+    print ('')
 
     return laTabla
 
@@ -704,7 +705,7 @@ def evaluarCadena(prodsNumeradas, laTabla, cadena):
 
     cadenaEsAcepta, prodsUsadas =  seguimiento(prodsNumeradas, laTabla, cadena)
 
-    print 'Producciones usadas:'
+    print ('Producciones usadas:')
 
     # Imprimo las producciones que generan la cadena
     while not len(prodsUsadas) <= 0:
@@ -713,7 +714,7 @@ def evaluarCadena(prodsNumeradas, laTabla, cadena):
         prod = prodsUsadas.pop()
 
         #if not prod == -1:
-        print  prodsNumeradas[prod][0], '->', prodsNumeradas[prod][1]
+        print  (prodsNumeradas[prod][0], '->', prodsNumeradas[prod][1])
 
 
     print ('')
@@ -804,7 +805,7 @@ def main(argv):
         laTabla = estrategiaIncreible(gramatica, produccionesNumeradas)
 
         # Imprimo la tabla generada
-        print "La Tabla: "
+        print ("La Tabla: ")
         print (laTabla)
         print ('')
 
@@ -812,25 +813,25 @@ def main(argv):
         if (withString):
 
             # Verifico que la cadena sea aceptada
-            if (evaluarCadena(produccionesNumeradas, laTabla, inputString + '#')):
+            if (evaluarCadena(produccionesNumeradas, laTabla, inputString + '##')):
                 # Informo que es aceptada
                 print ("La cadena es generada por la gramatica") 
-                print ''
+                print ('')
 
             else:
                 # Informo que NO es aceptada
                 print ("La cadena NO es generada por la gramatica") 
-                print ''
+                print ('')
         else:
             # leer las cadena que ingresa el usuario y chekear si cada una es 
             # aceptada por el automata
             print ("implementame (?)") 
-            print ''
+            print ('')
 
     else:
         # Si la ruta no es valida o no corresponde a un archivo
         print ("El archivo no es valido") 
-        print ''
+        print ('')
 
 
 
