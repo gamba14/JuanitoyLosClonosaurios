@@ -392,6 +392,9 @@ def agregarProduccionAuxiliar(gramatica, prodsNumeradas):
     # Verifico que # no se encuentre definida en la gramatica original
     assert not '#' in v, "# ya esta definida en la gramatica original"
 
+    # Agrego el auxiliar a VT
+    gramatica["VT"].update('#')
+
     # Genero el lado derecho de la produccion auxiliar
     ladoDerecho = sInit + '#'
 
