@@ -229,11 +229,11 @@ def clausure(gramatica, cjtoItems):
     idx = 0
 
     ##
-    # "Mientras alla items sin marcar" 
+    # "Mientras halla items sin marcar" 
     # - Teoria
     #
     # "Mientras el NO alla finalizado de recorrer la lista mutable y
-    # NO alla explotado la memoria en un loop infinto inentencional (?)"
+    # NO alla explotado la memoria en un loop infinto inintencional (?)"
     # - Practica
     ##
     while (idx < len(listaItems)):
@@ -305,13 +305,13 @@ def calcuarSimbolosDeDesplazamiento(gramatica, cjtoItems):
         if ( posPunto < len(ladoDerecho) ): 
 
             # Obtengo el simbolo apuntado
-            simbolo = ladosDerechos[posPunto]
+            simbolo = ladoDerecho[posPunto]
 
             # Agrego el item al conjunto
             resultado.add(simbolo)
 
     # Un poco de paranoia no hace mal :V
-    assert resultado.issubset( vn.union(vt) ), "El resultado N= es un subconjunto de V!"
+    assert resultado.issubset( vn.union(vt) ), "El resultado NO es un subconjunto de V!"
     
     # TODO: probar, testear, test me, cosa
 
@@ -331,7 +331,7 @@ def goto(gramatica, cjtoItems, caracter):
     for item in cjtoItems:
         
         #pregunto si el caracter esta adelante del punto
-        if item[1][item[2]]== caracter:
+        if item[1][item[2]] == caracter:
             
             #agrego el item a un conjunto para seguirlo analizando despues
             aux.append(item)
