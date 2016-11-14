@@ -466,12 +466,10 @@ def seguimiento(produccionesNumeradas, tabla, cadena):
     return (cadenaEsAcepta, produccionesUsadas)
 
 
-
-
 def estrategiaIncreible(gramatica, prodsNumeradas):
     """ Genera "LA TABLA" """
 
-    # TODO: implementar. (devolver tabla y producciones Numeradas)
+    # TODO: implementar. (devolver tabla)
     # ProduccionesNumeradas {numero: produccion}
     # Produccion (ladoIzquierdo, ladosDerechos)
     # Tabla (dicionarios de diccionarios): {"estado": { simboloA: accion, simboloB: accion }}
