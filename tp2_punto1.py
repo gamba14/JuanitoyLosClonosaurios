@@ -97,7 +97,7 @@ def parseInitState(gramatica, line):
         pass # TODO: hacer algo cuando el formato no coincida
     
 
-def parseProducciones(gramatica, line):
+def parseProducciones(meta, prodsNumeradas, gramatica, line):
     """ Obtengo las producciones desde la linea """
     
     # Busco la posiciones de la flecha
@@ -112,6 +112,9 @@ def parseProducciones(gramatica, line):
 
         # Creo la union de VN y VT
         v  = vn.union(vt)
+
+        # Hago cache a la cantidad Producciones
+        cantProds = meta["cantProds"]
 
         # Obtengo el lado izquierdo
         ladoIzquierdo = line[0:begin].strip()
@@ -140,6 +143,16 @@ def parseProducciones(gramatica, line):
                     # Actualizo la lista de producciones asoiciadas
                     gramatica["prods"][ladoIzquierdo] = li_prods
 
+                    # Incremento la cantidad de producciones
+                    cantProds += 1
+
+                    # Agrego la nueva produccion numerada
+                    prodsNumeradas[cantProds] = (ladoIzquierdo, ladoDerecho)
+
+                    # Almaceno el estado la nueva cantidad de producciones
+                    meta["cantProds"] = cantProds
+
+
             else:
                 pass # TODO: tirar error cuando el formato NO coincida
 
@@ -148,14 +161,25 @@ def parseProducciones(gramatica, line):
 
 
 def parseFile(path):
-    """ Leeo la gramatica desde el archivo y la valido """
+    """ 
+    Leeo la gramatica desde el archivo y la valido
+    Devuelvo dicionario con la gramatica y diccionario con las producciones numeradas
+    """
 
     gramatica = {
         "VN": set([]), # no terminales
         "VT": set([]), # terminales
         "sInit": "",   # simbolo inicial
-        "prods": {}    # produciones: {ladoIzquierdo: [ladosDerechos] }
+        "prods": {}    # producciones: {ladoIzquierdo: [ladosDerechos] }
     }
+
+    # ProduccionesNumeradas {numero: produccionN}
+    # ProduccionN (ladoIzquierdo, ladosDerechos)
+    prodsNumeradas = {}
+
+    # Numero de producciones encontradas hasta el momento
+    # uso diccionario como wapper para que sea mutable
+    meta = { "cantProds": 0 }
 
     # Defino un dicionario por python no soporta el swich case 
     # y porque son cool
@@ -179,13 +203,14 @@ def parseFile(path):
         
         # Busco el interprete(?) correspondiente para el numero de linea en el
         # dicionario. Si NO se encuentra se usa parseProducciones
-        parser = parsers.get(lineNumber, parseProducciones)
+        # uso una aplicacion pracial en parseProducciones
+        parser = parsers.get(lineNumber, partial(parseProducciones, meta, prodsNumeradas))
 
         # Ejecuto el interprete(?) correspondiente para la linea
         parser(gramatica, line)
 
     # Devuelvo el automata
-    return gramatica
+    return (gramatica, prodsNumeradas)
 
 
 def clausure(gramatica, cjtoItems):
@@ -463,7 +488,7 @@ def seguimiento(produccionesNumeradas, tabla, cadena):
 
 
 
-def estrategiaIncreible(gramatica):
+def estrategiaIncreible(gramatica, prodsNumeradas):
     """ Genera "LA TABLA" """
 
     # TODO: implementar. (devolver tabla y producciones Numeradas)
@@ -540,13 +565,16 @@ def main(argv):
     if (os.path.exists(path) and os.path.isfile(path)):
 
         # Parseo/Interpreto/(?) el archivo (como automata)
-        gramatica = parseFile(path)
+        gramatica, produccionesNumeradas = parseFile(path)
 
         # Imprimo el resultado del parseo (me canse)
         print (gramatica) 
+        print ('')
+        print (produccionesNumeradas)
+        print ('')
 
         # Genero "LA TABLA"
-        laTabla = estrategiaIncreible(gramatica)
+        laTabla = estrategiaIncreible(gramatica, produccionesNumeradas)
 
         # Imprimo la tabla generada
         print (laTabla)
