@@ -349,6 +349,43 @@ def goto(gramatica, cjtoItems, caracter):
     return clausure(gramatica, listaAClausurar)
 
 
+def contieneItemsCompleto(cjtoItems):
+    """ Devuelve True si el conjunto tiene un item completo sino False """
+    return any( len(item[1]) == item[2] for item in cjtoItems )
+
+
+def listaDeItemsCompletos(cjtoItems):
+    """ Devuelve una lista de items completos """
+    return [item for item in cjtoItems if len(item[1]) == item[2] ]
+
+def contieneItemCompletoConFinDeCadena(cjtoItems):
+    """ 
+    Devuelve True si el conjunto tiene un item completo y es el de fin de cadena
+    sino False 
+    """
+    return any( len(item[1]) == item[2] and item[1][-1] == '#' for item in cjtoItems )
+
+def buscarProduccionDelItem(prodsNumeradas, item):
+    """ Busco el nuero de la produccion correspondiente al item """
+
+    # ProduccionesNumeradas {numero: produccion}
+    # Produccion (ladoIzquierdo, ladoDerecho)
+
+    # Combierto el diccionario en una lista de tuplas para poder analizarlo
+    # [(numero, produccion)]
+    lista = [ (idx, prodsNumeradas[idx]) for idx in list(prodsNumeradas) ]
+
+    # filtro las tuplas si producciones que considen con el lado derecho e izquierdo con los 
+    # correspondientes del item
+    filtrado = [ tupla for tupla in lista if tupla[1][0] == item[0] and tupla[1][1] == item[1] ]
+
+    # Si esto paso hay algo mal...
+    assert len(filtrado) == 1, "Se encontro mas de una produccion que coincide con el item"
+
+    # Devuelvo el numero de la produccion del primer elemento (unico) de la lista
+    return filtrado[0][0]
+
+
 def agregarProduccionAuxiliar(gramatica, prodsNumeradas):
     """
     Agrego una produccion auxiliar del tipo: E' -> E#
@@ -515,14 +552,152 @@ def estrategiaIncreible(gramatica, prodsNumeradas):
 
     # TODO: implementar. (devolver tabla)
     # ProduccionesNumeradas {numero: produccion}
-    # Produccion (ladoIzquierdo, ladosDerechos)
+    # Produccion (ladoIzquierdo, ladoDerecho)
+
+    # formato de items (lado izquierdo, lado derecho, posicion punto)
+
     # Tabla (dicionarios de diccionarios): {"estado": { simboloA: accion, simboloB: accion }}
-    # Accion ("incial de la accion", "item o produccion sobre la cual hacer la accion")
+    # Accion ("inicial de la accion", "estado o produccion sobre la cual hacer la accion")
+    laTabla = {}
 
-    pass
+    # auxiliar para mapeo estado con conjuntos de items
+    estadosItems = {}
+
+    # auxiliar para mapeo items con estados
+    itemsEstados = {}
+
+    # auxiliar para ver si el item ya fue agregado como estado
+    estadosCrudos = []
+
+    # Cacheo
+    vt = gramatica["VT"]
+    vn = gramatica["VN"]
+
+    # Obtengo la produccion inicial (-1)
+    prodInicial = prodsNumeradas[-1]
+
+    # Genero el estado inicial 
+    items = clausure(gramatica, { (prodInicial[0], prodInicial[1], 0) } )
+
+    # Almaceno el resultado
+    estadosCrudos.append(items)
+    estadosItems[0] = items
+    itemsEstados[str(items)] = 0
+
+    # Numero de estado 
+    nEstados = 1
+
+    ##
+    # "Mientras halla conjuntos de items sin marcar" 
+    # - Teoria
+    #
+    # "Mientras el NO alla finalizado de recorrer la lista mutable y
+    # NO alla explotado la memoria en un loop infinto inintencional (?)"
+    # - Practica
+    ##
+    for cjtoItems in estadosCrudos:
+
+        # Objetengo el estado actual
+        estadoActual = itemsEstados[str(cjtoItems)]
+
+        # Calculo los posibles simbolos
+        simbolos = calcuarSimbolosDeDesplazamiento(gramatica, cjtoItems)
 
 
-def evaluarCadena(gramatica, laTabla, cadena):
+        # Si contiene items completos con el simbolo de fin de cadena
+        # Accepto la cadena
+        if contieneItemCompletoConFinDeCadena(cjtoItems):
+
+            # Obtengo el dicionario para el estado actual
+            aux = laTabla.get(estadoActual, {})
+
+            # Agrego la accion de reducir para todos los simbolos de entrada
+            aux["#"] = ('a', -1)
+
+            # Actualizo la tabla
+            laTabla[estadoActual] = aux
+
+
+        elif contieneItemsCompleto(cjtoItems) and not contieneItemCompletoConFinDeCadena(cjtoItems):
+            # Si contiene items completos y NO es el simbolo de fin de cadena
+            # Hago una reduccion
+            
+            # Obtengo el item completo
+            completos = listaDeItemsCompletos(cjtoItems)
+
+            # Si pasa esto hay algo mal...
+            assert len(completos) == 1, "Se obtuvo mas de un item completo con goto"
+
+            # Obtengo el numero de produccion correspondiente al item completo
+            produccion = buscarProduccionDelItem(prodsNumeradas, completos[0])
+
+            # Obtengo el dicionario para el estado actual
+            aux = laTabla.get(estadoActual, {})
+
+            # Agrego la accion de reducir para todos los simbolos de entrada
+            for caracter in vt:
+                aux[caracter] = ('r', produccion)
+
+            # Actualizo la tabla
+            laTabla[estadoActual] = aux
+
+
+        # Para cada simbolo
+        for simbolo in simbolos:
+
+            nuevoCjtoItems = goto(gramatica, cjtoItems, simbolo)
+
+            # Si conjunto de items es nuevo 
+            if not nuevoCjtoItems in estadosCrudos:
+
+                # Lo agrego
+                estadosCrudos.append(nuevoCjtoItems)
+                estadosItems[nEstados]            = nuevoCjtoItems
+                itemsEstados[str(nuevoCjtoItems)] = nEstados
+
+                # Incremento el numero de estados
+                nEstados += 1
+
+
+            # Objetengo el siguiente estado
+            siguienteEstado = itemsEstados[str(nuevoCjtoItems)]
+
+
+
+            if simbolo in vn:
+
+                # Obtengo el dicionario para el estado actual
+                aux = laTabla.get(estadoActual, {})
+
+                # Agrego la accion de reducir para todos los simbolos de entrada
+                aux[simbolo] = ('m', siguienteEstado)
+
+                # Actualizo la tabla
+                laTabla[estadoActual] = aux
+
+            elif simbolo in vt: 
+
+                # Obtengo el dicionario para el estado actual
+                aux = laTabla.get(estadoActual, {})
+
+                # Agrego la accion de reducir para todos los simbolos de entrada
+                aux[simbolo] = ('d', siguienteEstado)
+
+                # Actualizo la tabla
+                laTabla[estadoActual] = aux
+
+            else:
+                # TODO: reemplazar con una exepcion(?) o lo que corresponda
+                # Si esto pasa algo anda mal..
+                assert False, "Error al generar la tabla"
+
+
+    print estadosItems
+    print ''
+
+    return laTabla
+
+
     """ Evalua la cadena de entrada y muestra que producciones se usaron para crearla """
 
     # TODO: implementar. (devolver como se derivo de la cadena, indicando producciones usadas)
