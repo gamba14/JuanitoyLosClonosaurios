@@ -363,10 +363,14 @@ def automataYTabla(gramatica):
 def seguimiento(produccionesNumeradas, tabla, cadena):
     """ devuelve true o false si la acepta o no """
 
+    # El numero de las producciones usadas
     produccionesUsadas = []
 
-    analisisFinalizado   = False
-    cadenaEsAcepta       = False
+    # Flag con el resultado del analisis
+    cadenaEsAcepta = False
+
+    # Flag de error
+    error = False
 
     # Inicio la pila en q0
     pila = [0]
@@ -376,7 +380,16 @@ def seguimiento(produccionesNumeradas, tabla, cadena):
         
         desplazar = False
 
-        while not desplazar:
+        # En caso de error
+        if error:
+            # Rompo el for loop
+            break
+
+        # Assercion por la NO se termino de recorrer la cadena y se indico como aceptada
+        assert cadenaEsAcepta, "La cadena ya esta aceptada NO debiria seguir ejecutandose"
+
+        # para NO avanazar hasta que el la flad diga lo contrario
+        while not desplazar and not error:
 
             # Me fijo en el tope de la tabla
             estado = pila[-1]
@@ -384,6 +397,9 @@ def seguimiento(produccionesNumeradas, tabla, cadena):
             #me fijo que es lo que tengo que hacer cuando estoy en ese estado y me entra ese caracter
             #esto devuelve el par que mande por whatsapp
             accion = tabla(estado, caracter)
+
+            # Asercion, un estado y un terminal nunca puede dar una accion 'm'
+            assert accion[0] != 'm', "La accion mover nunca debe ser usada en este punto"
         
             if accion[0] == 'd':
                 # Agrego el estado a la pila
@@ -392,17 +408,8 @@ def seguimiento(produccionesNumeradas, tabla, cadena):
                 # Avanzo al siguiente elemento de la cadena
                 desplazar = True
 
-            if accion[0] == 'm':
-                #mover: 
-               
-                # Agrego el estado a la pila
-                pila.append(accion[1])
-
             elif accion[0] == 'r':  
                 #reducir:       
-                
-                # XXX: trabajando aca me falta ver el goto que dice la fotocopia,
-                # Estoy viendo el seguiemiento de la pila que hace herman
 
                 # Obtengo las producciones
                 produccion = produccionesNumeradas[accion[1]]
@@ -414,13 +421,26 @@ def seguimiento(produccionesNumeradas, tabla, cadena):
                 n = len(ladoDerecho)
 
                 # elemino los n ultimos de la pila
-                for i in xrange(n)
+                for i in xrange(n):
                     pila.pop()
 
-                #agrego el item a la lista
-                #seria mas una lista de items completos, habria que ver como lo imprimimos
+                # Agrego el numero de la produccion usada para la reduccion
                 produccionesUsadas.append(accion[1])
-                
+
+                # Obtegengo el lado izquierdo de la produccion
+                ladoIzquierdo = producion[0]
+
+                # Obtengo la accion para el lado izquierdo
+                accion = tabla(estado, ladoIzquierdo)
+
+                # Asercion, la accion 'm' solo se debe usar aca
+                assert accion[0] == 'm', "la accion siempre tiene que ser mover en este punto"
+
+                # Agrego el estado a la pila
+                pila.append(accion[1])
+
+                # indico que NO me deplazo
+                desplazar = False
                 
             elif accion[0] == 'a':
                 #aceptar
@@ -434,7 +454,7 @@ def seguimiento(produccionesNumeradas, tabla, cadena):
                 cadenaEsAcepta = False
 
                 # Para romper el while loop
-                desplazar = True
+                error = True
                 
 
     # Devuelvo si la cadena es aceptado y las producciones usadas para crear la cadena (si corresponde)
