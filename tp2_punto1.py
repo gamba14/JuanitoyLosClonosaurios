@@ -699,11 +699,24 @@ def estrategiaIncreible(gramatica, prodsNumeradas):
     return laTabla
 
 
+def evaluarCadena(prodsNumeradas, laTabla, cadena):
     """ Evalua la cadena de entrada y muestra que producciones se usaron para crearla """
 
-    # TODO: implementar. (devolver como se derivo de la cadena, indicando producciones usadas)
+    cadenaEsAcepta, prodsUsadas =  seguimiento(prodsNumeradas, laTabla, cadena)
 
-    pass
+    # Imprimo las producciones que generan la cadena
+    while not len(prodsUsadas) <= 0:
+
+        # TODO: mejorar esto
+
+        prod = prodsUsadas.pop()
+
+        if not prod == -1:
+            print  prodsNumeradas[prod][0], '->', prodsNumeradas[prod][1]
+
+    print ('')
+
+    return cadenaEsAcepta
 
 
 def main(argv):
@@ -786,12 +799,13 @@ def main(argv):
 
         # Imprimo la tabla generada
         print (laTabla)
+        print ('')
 
         # Si se dispone a cadena a comprobar
         if (withString):
 
             # Verifico que la cadena sea aceptada
-            if (evaluarCadena(gramatica, laTabla, inputString + '#')):
+            if (evaluarCadena(produccionesNumeradas, laTabla, inputString + '#')):
                 # Informo que es aceptada
                 print ("La cadena es generada por la gramatica") 
 
