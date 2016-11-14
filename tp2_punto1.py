@@ -349,19 +349,60 @@ def goto(cjtoItems,caracter):
     return clausure(gramatica,listaAClausurar)
 
 
+def agregarProduccionAuxiliar(gramatica, prodsNumeradas):
+    """
+    Agrego una produccion auxiliar del tipo: E' -> E#
+    """
 
+    # cacheo VN y VT
+    vn = gramatica["VN"]
+    vt = gramatica["VT"]
 
+    # genero V
+    v = vt.union(vn)
 
+    # para almacener el No Terminal auxiliar
+    nuevoVN = ''
 
+    # Busco un simbolo libre para usar de auxiliar
+    if not 'E' in v:
+        nuevoVN = 'E'
 
+    elif not 'S' in v:
+        nuevoVN = 'S'
 
+    elif not '$' in v:
+        nuevoVN = '$'
 
+    elif not '&' in v:
+        nuevoVN = '&'
 
+    else:
+        print("Que gramatica mas jodida :V")
 
+        # TODO: reemplazar esto con una excepcion(?) o lo que corresponda
+        assert False, "NO se encontro un caracer libre para el auxiliar"
 
+    # Agrego el auxiliar a VN
+    gramatica["VN"].update(nuevoVN)
 
+    # guardo el simbolo incial original 
+    sInit = gramatica["sInit"]    
+    
+    # Verifico que # no se encuentre definida en la gramatica original
+    assert not '#' in v, "# ya esta definida en la gramatica original"
 
+    # Genero el lado derecho de la produccion auxiliar
+    ladoDerecho = sInit + '#'
 
+    # Agrego la produccion auxiliar
+    gramatica["prods"][nuevoVN] = [ladoDerecho]
+
+    # Cambio el simbolo inicial
+    gramatica["sInit"] = nuevoVN
+
+    # Agrego la produccion numera en un lugar que se que esta vacio
+    prodsNumeradas[-1] = (nuevoVN, ladoDerecho)
 
 
 
@@ -551,6 +592,16 @@ def main(argv):
         print (produccionesNumeradas)
         print ('')
 
+        # Agrego la produccion auxiliar
+        agregarProduccionAuxiliar(gramatica, produccionesNumeradas)
+
+        # Imprimo el resultado (for debug)
+        #print ('Gramatica con produccion auxiliar')
+        #print (gramatica) 
+        #print ('')
+        #print (produccionesNumeradas)
+        #print ('')
+
         # Genero "LA TABLA"
         laTabla = estrategiaIncreible(gramatica, produccionesNumeradas)
 
@@ -561,7 +612,7 @@ def main(argv):
         if (withString):
 
             # Verifico que la cadena sea aceptada
-            if (evaluarCadena(gramatica, laTabla, inputString)):
+            if (evaluarCadena(gramatica, laTabla, inputString + '#')):
                 # Informo que es aceptada
                 print ("La cadena es generada por la gramatica") 
 
