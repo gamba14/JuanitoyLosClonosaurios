@@ -424,7 +424,8 @@ def estrategiaIncreible(gramatica):
     """ Genera "LA TABLA" """
 
     # TODO: implementar. (devolver tabla y producciones Numeradas)
-    # Producciones Numeradas {numero: produccion}
+    # ProduccionesNumeradas {numero: produccion}
+    # Produccion (ladoIzquierdo, ladosDerechos)
     # Tabla (dicionarios de diccionarios): {"estado": { simboloA: accion, simboloB: accion }}
     # Accion ("incial de la accion", "item o produccion sobre la cual hacer la accion")
 
