@@ -330,11 +330,13 @@ def goto(gramatica, cjtoItems, caracter):
     #para todos los items del conjunto
     for item in cjtoItems:
         
+        if len(item[1]) > item[2]:
+
         #pregunto si el caracter esta adelante del punto
-        if item[1][item[2]] == caracter:
+            if item[1][item[2]] == caracter:
             
             #agrego el item a un conjunto para seguirlo analizando despues
-            aux.append(item)
+                aux.append(item)
 
     #para todos los items que cumplen la condicion
     for item in aux:
